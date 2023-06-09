@@ -1,127 +1,147 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<div th:replace="~{layout/PageHeader}"></div>
-<!-- ↓↓↓↓↓↓↓ head field ↓↓↓↓↓↓↓  -->
-<div th:replace="~{layout/DataTableFiles}"></div>
-<!-- ↑↑↑↑↑↑↑ head field ↑↑↑↑↑↑↑  -->
-</head> <!-- <= 不能省略 補足PageHeader.jsp裡面的<head>  -->
+<meta charset="utf-8" />
+<title>台灣高鐵增修頁面</title>
+<style>
+.container {
+	width: 500px;
+}
+
+.aside {
+	border: 2px solid rgb(215, 211, 211);
+	border-radius: 30px;
+	background-color: #FFF;
+	box-shadow: 3px 3px 3px gray;
+	margin: 10px 0px 0px 0px;
+
+.section {
+	border-radius: 5px;
+	padding: 40px 40px 5px 40px;
+	line-height: 2em;
+}
+</style>
 </head>
-
-<% String basePath = request.getScheme() + "://" +
-request.getServerName() + ":" + request.getServerPort() +
-request.getContextPath() + "/"; %>
-
-<body>
-	<div th:replace="~{layout/dashboardNavbar1}"></div>
-	<main>
+<body onload="showPrice()" class="sb-nav-fixed">
+<div th:replace="~{layout/dashboardHeader}"></div>
+<main>
 		<div class="container-fluid px-4">
-			<h1 class="mt-4">台灣高鐵時刻表與票價查詢</h1>
+			<h1 class="mt-4">Dashboard</h1>
 			<hr>
 			<div class="card mb-4">
 				<div class="card-header">
-					<i class="fas fa-table me-1"></i>
+					<i class="fas fa-table me-1"></i> DataTable Example
 				</div>
 				<div class="card-body">
-					<article class="text-center container">
-						<section class="timetable-search-frame bg-grey">
-							<div class="container">
-								<div class="download-ttable"></div>
-								<div class="ha-nav-content">
-									<div class="p-3 mb-2 bg-light border border-2 rounded">
-										<div class="inline-input-group row">
-											<div class="col-input col">
-												<button type="button" title="查詢訂票資訊"
-													class="btn btn-secondary  mt-3" id="search"
-													onclick="show()">查詢訂票資訊</button>
-											</div>
-											<div class="col-input col">
-												<button type="button" title="新增單筆資料"
-													class="btn btn-secondary  mt-3" id="insert"
-													onclick="insertRecord()">新增單筆資料</button>
-											</div>
-										</div>
+					<article class="container">
+						<div class="aside">
+							<div class="section">
+								<form method='post'
+									action='<spring:url value="/highSpeedRail/doAction"/>'>
+									<h2 style="text-align: center;">增修資料</h2>
+									<div style="margin: 5px;">
+										<label for="ticketID" class="t1">訂票編號：</label> <input
+											type="text" id="ticketID" name="ticketID"
+											value="${ticketDto.ticketID}" class="form-control"
+											${ticketDto==null ? "autofocus" : "onclick='blur()'"}>
 									</div>
-								</div>
-								<div>
-									<hr>
-									<table id="queryResult"
-										class="table table-bordered table-striped table-sm display"
-										style="width: 100%;">
-										<thead class="table-light">
-											<tr>
-												<th scope="col" class="align-middle">#</th>
-												<th scope="col" class="align-middle">班次</th>
-												<th scope="col" class="align-middle">座位</th>
-												<th scope="col" class="align-middle">出發站</th>
-												<th scope="col" class="align-middle">抵達站</th>
-												<th scope="col" class="align-middle">出發日期</th>
-												<th scope="col" class="align-middle">出發時間</th>
-												<th scope="col" class="align-middle">抵達時間</th>
-												<th scope="col" class="align-middle">票價</th>
-												<th scope="col" class="align-middle">訂票日期</th>
-												<th></th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody id="queryContent">
-										</tbody>
-									</table>
-								</div>
+									<div style="margin: 5px;">
+										<label for="tranNo" class="t1">班次：</label> <input type="text"
+											id="tranNo" name="tranNo" value="${ticketDto.tranNo}"
+											class="form-control" autofocus>
+									</div>
+									<div style="margin: 5px;">
+										<label for="seat" class="t1">座位：</label> <input type="text"
+											id="seat" name="seat" value="${ticketDto.seat}"
+											class="form-control" autofocus>
+									</div>
+									<div style="margin: 5px;">
+										<label for="DepartureST" class="t1">出發站：</label>
+										<!-- 改成用selection(下拉是選單) ↓ -->
+										<select id="DepartureST" name="departureST"
+											class="form-control mt-0 select-type01" title="出發站"
+											onchange="showPrice()">
+											<%-- <%
+													List<StationInfoDTO> stationList = (ArrayList<StationInfoDTO>) request.getAttribute("stationList");
+													for (StationInfoDTO st : stationList) {
+														String selected = departureST.equals(Integer.toString(st.getStationID())) ? "selected" : "";
+													%> --%>
+											<c:forEach var="station" items="${stationList}">
+												<option value="${station.stationID}"
+													${ticketDto.getDepartureST().equals(Integer.toString(station.getStationID())) ? "selected" : ""}>
+													${station.stationName}</option>
+											</c:forEach>
+											<%-- <%
+													}
+													%> --%>
+										</select>
+									</div>
+									<div style="margin: 5px;">
+										<label for="DestinationST" class="t1">抵達站：</label>
+										<!-- 改成用selection(下拉是選單) ↓ -->
+										<select id="DestinationST" name="destinationST"
+											class="form-control mt-0 select-type01" title="到達站"
+											onchange="showPrice()">
+											<%-- <%
+													for (StationInfoDTO st : stationList) {
+														String selected = destinationST.equals(Integer.toString(st.getStationID())) ? "selected" : "";
+													%> --%>
+											<c:forEach var="station" items="${stationList}">
+												<option value="${station.stationID}"
+													${ticketDto.getDestinationST().equals(Integer.toString(station.getStationID())) ? "selected" : ""}>
+													${station.stationName}</option>
+											</c:forEach>
+											<%-- <%
+													}
+													%> --%>
+										</select>
+									</div>
+									<div style="margin: 5px;">
+										<label for="depturedate" class="t1">出發日期：</label> <input
+											type="date" id="departuredate" name="departuredate"
+											value="${ticketDto.departuredate}" class="form-control"
+											autofocus>
+									</div>
+									<div style="margin: 5px;">
+										<label for="departuretime" class="t1">出發時間：</label> <input
+											type="text" id="departuretime" name="departuretime"
+											value="${ticketDto.departuretime}" class="form-control"
+											autofocus>
+									</div>
+									<div style="margin: 5px;">
+										<label for="arrivaltime" class="t1"> 抵達時間： </label> <input
+											type="text" id="arrivaltime" name="arrivaltime"
+											value="${ticketDto.arrivaltime}" class="form-control"
+											autofocus />
+									</div>
+									<div style="margin: 5px;">
+										<label for="price" class="t1">票價：</label> <input type="text"
+											id="price" name="price" value="${ticketDto.price}"
+											class="form-control mt-0 select-type01">
+									</div>
+									<div style="margin: 5px;">
+										<label for="bookingdate" class="t1">訂票日期：</label> <input
+											type="date" id="bookingdate" name="bookingdate"
+											value="${ticketDto.bookingdate}" class="form-control"
+											autofocus>
+									</div>
+									<div style="text-align: center; padding: 30px;">
+										<button type="submit" class="btn btn-dark"
+											style="margin: 10px;">${ticketDto== null ? "新增" : "修改"}</button>
+										<button type="reset" onclick="history.back()"
+											class="btn btn-dark" style="margin: 10px;">取消</button>
+									</div>
+									<input type="hidden" name="action"
+										value='${ticketDto== null ? "doInsert" : "doUpdate"}' />
+								</form>
 							</div>
-						
-						</section>
+						</div>
 					</article>
 				</div>
 			</div>
 		</div>
 	</main>
-	<div th:replace="~{layout/dashboardNavbar2}"></div>
-
-	<script type="text/javascript">
-	var basePath = "<%=basePath%>";
-
-		$(document).ready(function() {
-			document.querySelector("#queryResult").hidden = true;
-		});
-
-		function show() {
-			let table;
-			let allTicketInfoDataSource = basePath
-					+ "services/GetAllTicketInfo";
-			if ($.fn.dataTable.isDataTable('#queryResult')) {
-				table = $('#queryResult').DataTable();
-			} else {
-				table = $('#queryResult').DataTable({
-					ajax : allTicketInfoDataSource
-				});
-			}
-			table.ajax.reload();
-			document.querySelector("#queryResult").hidden = false;
-		}
-
-		function insertRecord() {
-			location.href = basePath + "highSpeedRail/insert";
-		}
-
-		function updateTarget(id) {
-			location.href = basePath + "highSpeedRail/update?id=" + id;
-		}
-
-		function deleteTarget(id) {
-			const xhttp = new XMLHttpRequest();
-			xhttp.onload = function() {
-				if (this.status === 200) {
-					deleteResult = JSON.parse(this.response);
-					alert(deleteResult.msg);
-					document.querySelector("#search").click();
-				}
-			}
-			xhttp.open("POST", basePath + "services/DeleteTicketInfo");
-			xhttp.setRequestHeader("Content-type",
-					"application/x-www-form-urlencoded");
-			xhttp.send("services=DeleteTicketInfo&id=" + id);
-		}
-	</script>
+<div th:replace="~{layout/dashboardFooter}"></div>
+<script th:src="/js/ming/BookingAdminJS.js"></script>
 </body>
 </html>
