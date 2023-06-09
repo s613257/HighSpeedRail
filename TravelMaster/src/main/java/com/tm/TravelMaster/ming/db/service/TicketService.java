@@ -1,4 +1,4 @@
-package com.tm.TravelMaster.ming.db.dao.impl;
+package com.tm.TravelMaster.ming.db.service;
 
 import java.util.List;
 import java.util.Optional;

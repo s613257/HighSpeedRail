@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tm.TravelMaster.ming.db.dao.BookingDAO;
-import com.tm.TravelMaster.ming.db.dao.impl.TicketService;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
+import com.tm.TravelMaster.ming.db.service.TicketService;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
 

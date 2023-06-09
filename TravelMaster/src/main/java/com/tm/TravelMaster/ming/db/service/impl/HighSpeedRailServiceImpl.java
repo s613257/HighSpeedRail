@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.tm.TravelMaster.ming.db.dao.BookingDAO;
-import com.tm.TravelMaster.ming.db.dao.impl.TicketService;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
+import com.tm.TravelMaster.ming.db.service.TicketService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TicketInfo;

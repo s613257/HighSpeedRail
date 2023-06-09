@@ -70,9 +70,12 @@ public class BookingDAOImpl  implements BookingDAO {
 
 	private List<TicketInfo> getAllTranInfoBySql(String sql) {
 		Session session = factory.openSession();
-		Query<TicketInfo> query = session.createQuery("from TicketInfo",TicketInfo.class);
-		return  query.list();
+		List<TicketInfo> resultTranList = new ArrayList<TicketInfo>();
+		Query<TicketInfo> query = session.createQuery(sql,TicketInfo.class);
+		resultTranList= query.list();
+		return resultTranList;
 	}
+	
 
 	
 	@Override

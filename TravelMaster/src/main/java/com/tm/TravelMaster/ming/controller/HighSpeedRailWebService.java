@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.dao.BookingDAO;
-import com.tm.TravelMaster.ming.db.dao.impl.TicketService;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
+import com.tm.TravelMaster.ming.db.service.TicketService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
