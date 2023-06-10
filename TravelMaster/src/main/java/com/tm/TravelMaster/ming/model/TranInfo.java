@@ -5,16 +5,29 @@ import java.sql.SQLException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Entity @Table(name = "TranInfo")
+@Data
 public class TranInfo {
 	
+	@Id @Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(name = "TranNo")
 	private String tranNo;
+	
+	@Column(name = "StationID")
 	private int stationID;
+	
+	@Column(name = "TrainArrivalTime")
 	private String trainArrvialTime;
 
-	public TranInfo() {
-	}
 
 	public TranInfo(ResultSet rs) throws SQLException {
 		this.tranNo = rs.getString("tranNo");
@@ -25,30 +38,6 @@ public class TranInfo {
 	@Override
 	public String toString() {
 		return "TranInfoDTO [TranNo=" + tranNo + ", StationID=" + stationID + ", TrainArrivalTime=" + trainArrvialTime + "]";
-	}
-
-	public String getTranNo() {
-		return tranNo;
-	}
-
-	public void setTranNo(String tranNo) {
-		this.tranNo = tranNo;
-	}
-
-	public int getStationID() {
-		return stationID;
-	}
-
-	public void setStationID(int stationID) {
-		this.stationID = stationID;
-	}
-
-	public String getTrainArrvialTime() {
-		return trainArrvialTime;
-	}
-
-	public void setTrainArrvialTime(String trainArrvialTime) {
-		this.trainArrvialTime = trainArrvialTime;
 	}
 
 }

@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.tm.TravelMaster.ming.db.dao.BookingDAO;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
+import com.tm.TravelMaster.ming.db.service.PriceService;
+import com.tm.TravelMaster.ming.db.service.StationService;
 import com.tm.TravelMaster.ming.db.service.TicketService;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
@@ -21,11 +22,13 @@ import com.tm.TravelMaster.ming.model.TicketInfo;
 public class HighSpeedRailController {
 
 	@Autowired
-	@Qualifier("bookingDAOImpl")
-	private BookingDAO bookingDAO;
+	private StationService stationService;
 
 	@Autowired
-	private TicketService ticketDAO;
+	private TicketService ticketsService;
+	
+	@Autowired
+	private PriceService priceService;
 
 	@Autowired
 	@Qualifier("highSpeedRailServiceImpl")
@@ -38,17 +41,16 @@ public class HighSpeedRailController {
 
 	@GetMapping("/insert")
 	public String insert(Model model) {
-		model.addAttribute("stationList", bookingDAO.getAllStationInfo());
-		model.addAttribute("priceInfos", bookingDAO.getAllPriceInfo());
-//		model.addAttribute("ticketDto", new TicketInfo());
+		model.addAttribute("stationList", stationService.findAllStationInfo());
+		model.addAttribute("priceInfos", priceService.findAllPriceInfo());
 		return "ming/BookingAdminDataPage";
 	}
 
     @GetMapping("/update")
     public String update(Model model, @RequestParam("id") String id) {
-        TicketInfo ticketDto = ticketDAO.findTicketInfoById(Integer.parseInt(id));
-        model.addAttribute("stationList", bookingDAO.getAllStationInfo());
-        model.addAttribute("priceInfos", bookingDAO.getAllPriceInfo());
+        TicketInfo ticketDto = ticketsService.findTicketInfoById(Integer.parseInt(id));
+        model.addAttribute("stationList", stationService.findAllStationInfo());
+        model.addAttribute("priceInfos", priceService.findAllPriceInfo());
         model.addAttribute("ticketDto", ticketDto);
         return "ming/BookingAdminDataPage";
     }
@@ -56,9 +58,9 @@ public class HighSpeedRailController {
     @PostMapping("/doAction")
     public String doAction(@ModelAttribute("ticketDto") TicketInfo ticketDto, @RequestParam("action")String action) {
     	if(action.equals("doInsert")) {
-    		ticketDAO.insertTicketInfo(ticketDto);
+    		ticketsService.insertTicketInfo(ticketDto);
     	}else if(action.equals("doUpdate")) {
-    		ticketDAO.updateTicketInfo(ticketDto);
+    		ticketsService.updateTicketInfo(ticketDto);
     	}
         return "redirect:/ming/highSpeedRail";
     }

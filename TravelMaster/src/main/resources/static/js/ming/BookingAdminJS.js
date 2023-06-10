@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	document.querySelector("#queryResult").hidden = true;
 });
+var basePath = window.location.protocol + "//" + window.location.hostname + ":" + location.port + '/TM';
+console.log(basePath);
 
 function show() {
 	let table;

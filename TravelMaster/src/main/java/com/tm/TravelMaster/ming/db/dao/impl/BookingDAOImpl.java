@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import com.tm.TravelMaster.ming.db.dao.BookingDAO;
 import com.tm.TravelMaster.ming.model.PriceInfo;
-import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
 import jakarta.transaction.Transactional;
@@ -47,13 +46,13 @@ public class BookingDAOImpl  implements BookingDAO {
 				+ "where des_st.StationID is not null;");
 	}
 	
-	@Override
-	public List<StationInfo> getAllStationInfo() {
+	private List<TicketInfo> getAllTranInfoBySql(String sql) {
 		Session session = factory.openSession();
-		Query<StationInfo> query = session.createQuery("from StationInfo", StationInfo.class);
-		return query.list();
+		List<TicketInfo> resultTranList = new ArrayList<TicketInfo>();
+		Query<TicketInfo> query = session.createQuery(sql,TicketInfo.class);
+		resultTranList= query.list();
+		return resultTranList;
 	}
-	
 	
 	@Override
 	public Map<Set<String> , Integer> getAllPriceInfo() {
@@ -67,16 +66,6 @@ public class BookingDAOImpl  implements BookingDAO {
 		}		
 		return result;
 	}
-
-	private List<TicketInfo> getAllTranInfoBySql(String sql) {
-		Session session = factory.openSession();
-		List<TicketInfo> resultTranList = new ArrayList<TicketInfo>();
-		Query<TicketInfo> query = session.createQuery(sql,TicketInfo.class);
-		resultTranList= query.list();
-		return resultTranList;
-	}
-	
-
 	
 	@Override
 	public List<PriceInfo> getInfoByPrice() {

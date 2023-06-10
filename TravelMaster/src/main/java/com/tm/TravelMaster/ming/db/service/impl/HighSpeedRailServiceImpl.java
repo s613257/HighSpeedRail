@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.tm.TravelMaster.ming.db.dao.BookingDAO;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
+import com.tm.TravelMaster.ming.db.service.StationService;
 import com.tm.TravelMaster.ming.db.service.TicketService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.StationInfo;
@@ -23,11 +22,10 @@ import jakarta.transaction.Transactional;
 public class HighSpeedRailServiceImpl  implements HighSpeedRailService {
 
 	@Autowired
-	@Qualifier("bookingDAOImpl")
-	private BookingDAO bookingDao;
-
+	private TicketService ticketService;
+	
 	@Autowired
-	private TicketService ticketDao;
+	private StationService stationService;
 
 	public HighSpeedRailServiceImpl() {
 
@@ -35,13 +33,13 @@ public class HighSpeedRailServiceImpl  implements HighSpeedRailService {
 
 	@Override
 	public HighSpeedRailTicket getBookingTkById(int ticketID) {
-		List<StationInfo> stationInfos = bookingDao.getAllStationInfo();
+		List<StationInfo> stationInfos = stationService.findAllStationInfo();
 		Map<Integer, String> stationMap = new HashMap<Integer, String>();
 		for (StationInfo stationInfo : stationInfos) {
 			stationMap.put(stationInfo.getStationID(), stationInfo.getStationName());
 		}
 
-		TicketInfo ticketInfo = ticketDao.findTicketInfoById(ticketID);
+		TicketInfo ticketInfo = ticketService.findTicketInfoById(ticketID);
 		HighSpeedRailTicket result = new HighSpeedRailTicket(ticketInfo);
 		result.setDepartureST(stationMap.get(Integer.parseInt(ticketInfo.getDepartureST())));
 		result.setDestinationST(stationMap.get(Integer.parseInt(ticketInfo.getDestinationST())));
@@ -51,9 +49,9 @@ public class HighSpeedRailServiceImpl  implements HighSpeedRailService {
 	@Override
 	public List<HighSpeedRailTicket> getAllBookingTk() {
 
-		List<TicketInfo> ticketInfoLst = ticketDao.findAllTicketInfo();
+		List<TicketInfo> ticketInfoLst = ticketService.findAllTicketInfo();
 
-		List<StationInfo> stationInfos = bookingDao.getAllStationInfo();
+		List<StationInfo> stationInfos = stationService.findAllStationInfo();
 		Map<Integer, String> stationMap = new HashMap<Integer, String>();
 		for (StationInfo stationInfo : stationInfos) {
 			stationMap.put(stationInfo.getStationID(), stationInfo.getStationName());
