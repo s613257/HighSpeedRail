@@ -91,7 +91,7 @@ public class HighSpeedRailWebService {
             tkDataLst.add(Integer.toString(tk.getPrice()));
             tkDataLst.add(tk.getBookingdate());
             tkDataLst.add("<button class=\"btn btn-light\" onclick=\"updateTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>");
-            tkDataLst.add("<button id=\"delete\" class=\"btn btn-light\" onclick=\"deleteTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>");
+            tkDataLst.add("<button class=\"btn btn-light\" onclick=\"deleteTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>");
             dataList.add(tkDataLst);
         }
         inputMap.put("data", dataList);
