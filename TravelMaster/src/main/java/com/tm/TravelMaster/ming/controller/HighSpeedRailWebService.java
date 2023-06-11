@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -92,7 +91,7 @@ public class HighSpeedRailWebService {
             tkDataLst.add(Integer.toString(tk.getPrice()));
             tkDataLst.add(tk.getBookingdate());
             tkDataLst.add("<button class=\"btn btn-light\" onclick=\"updateTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>");
-            tkDataLst.add("<button class=\"btn btn-light\" onclick=\"deleteTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>");
+            tkDataLst.add("<button id=\"delete\" class=\"btn btn-light\" onclick=\"deleteTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>");
             dataList.add(tkDataLst);
         }
         inputMap.put("data", dataList);
@@ -104,11 +103,8 @@ public class HighSpeedRailWebService {
     @DeleteMapping(value="/DeleteTicketInfo", produces = "application/json; charset=utf-8")
     @ResponseBody
     public String DeleteTicketInfo(@RequestParam("id") String id) {
-        boolean isSucceed = ticketDAO.deleteTickerInfoById(Integer.parseInt(id));
-        String msg = isSucceed ? "刪除成功" : "刪除失敗";
-        String json = String.format("{\"msg\":\"%s(id=%s)\"}", msg, id);
-        return json;
+        ticketDAO.deleteTickerInfoById(Integer.parseInt(id));
+		return id;
     }
-    
 
 }

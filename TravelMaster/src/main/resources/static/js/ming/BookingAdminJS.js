@@ -32,8 +32,24 @@ function deleteTarget(id) {
 	xhttp.onload = function() {
 		if (this.status === 200) {
 			deleteResult = JSON.parse(this.response);
-			alert(deleteResult.msg);
-			document.querySelector("#search").click();
+			Swal.fire({
+				title: '是否刪除?',
+				icon: 'warning',
+				showCancelButton: true,
+				cancelButtonColor: '#d33',
+				confirmButtonText: '取消',
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: '確定'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					Swal.fire(
+						'Deleted!',
+						'刪除成功',
+						'success'
+					)
+				}
+				$("#search").click();
+			})
 		}
 	}
 	xhttp.open("Delete", basePath + "/services/DeleteTicketInfo");

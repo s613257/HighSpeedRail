@@ -1,14 +1,19 @@
+.container{
+	display: flex;
+ 	 /* 水平置中 */
+ 	justify-content: center;    
+  	/* 垂直置中 */
+  	align-items: center;     
+}
 
 .aside {
+	width: 500px;
 	border: 2px solid rgb(215, 211, 211);
 	border-radius: 30px;
-	background-color: #FFF;
 	box-shadow: 3px 3px 3px gray;
-	margin: 10px 0px 0px 0px;
 }
 
 .section {
-	border-radius: 5px;
 	padding: 40px 40px 5px 40px;
 	line-height: 2em;
 }
