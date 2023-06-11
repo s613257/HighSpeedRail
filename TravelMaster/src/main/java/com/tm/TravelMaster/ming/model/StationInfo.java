@@ -18,6 +18,9 @@ public class StationInfo {
 	
 	@Column(name = "StationName")
 	private String stationName;
+	
+	public StationInfo() {
+	}
 
 	public StationInfo(ResultSet rs) throws SQLException {
 		this.stationID = rs.getInt("StationID");

@@ -3,121 +3,114 @@
 <head>
 <meta charset="utf-8" />
 <title>台灣高鐵增修頁面</title>
-<script th:src="/css/ming/BookingAdminDataPageCSS.css"></script>
+<style th:src="@{/css/ming/BookingAdminDataPageCSS.css}"></style>
 </head>
+
 <body th:onload="showPrice()" class="sb-nav-fixed">
 	<div th:replace="~{layout/dashboardHeader}"></div>
-	<main>
-		<div class="container-fluid px-4">
-			<h1 class="mt-4">Dashboard</h1>
-			<hr>
-			<div class="card mb-4">
-				<div class="card-header">
-					<i class="fas fa-table me-1"></i> DataTable Example
-				</div>
-				<div class="card-body">
-					<article class="container">
-						<div class="aside">
-							<div class="section">
-								<form method="post" th:action="@{/highSpeedRail/doAction}">
-									<h2 style="text-align: center;">增修資料</h2>
-									<div style="margin: 5px;">
-										<label for="ticketID" class="t1">訂票編號：</label> <input
-											type="text" id="ticketID" name="ticketID"
-											th:value="${ticketDto.ticketID}" class="form-control"
-											th:attr="${ticketDto == null} ? 'th:autofocus' : 'th:onclick=\\'blur()\\''">
-									</div>
-									<div style="margin: 5px;">
-										<label for="tranNo" class="t1">班次：</label> <input type="text"
-											id="tranNo" name="tranNo" th:value="${ticketDto.tranNo}"
-											class="form-control" th:autofocus>
-									</div>
-									<div style="margin: 5px;">
-										<label for="seat" class="t1">座位：</label> <input type="text"
-											id="seat" name="seat" th:value="${ticketDto.seat}"
-											class="form-control" th:autofocus>
-									</div>
-									<div style="margin: 5px;">
-										<label for="DepartureST" class="t1">出發站：</label>
-										<!-- 改成用selection(下拉是選單) ↓ -->
-										<select id="DepartureST" name="departureST"
-											class="form-control mt-0 select-type01" title="出發站"
-											th:onchange="showPrice()">
-											<th:block th:each="station : ${stationList}">
-												<option th:value="${station.stationID}"
-													th:selected="${ticketDto.departureST == station.stationID}">
-													${station.stationName}</option>
-											</th:block>
-											<!--	<c:forEach var="station" items="${stationList}">
-												<option value="${station.stationID}"${ticketDto.getDepartureST().equals(Integer.toString(station.getStationID())) ? "selected" : ""}>
-													${station.stationName}</option>
-											</c:forEach> -->
-										</select>
-									</div>
-									<div style="margin: 5px;">
-										<label for="DestinationST" class="t1">抵達站：</label>
-										<!-- 改成用selection(下拉是選單) ↓ -->
-										<select id="DestinationST" name="destinationST"
-											class="form-control mt-0 select-type01" title="到達站"
-											onchange="showPrice()">
-											<th:block th:each="station : ${stationList}">
-												<option th:value="${station.stationID}"
-													th:selected="${ticketDto.destinationST == station.stationID}">
-													${station.stationName}</option>
-											</th:block>
-										<!--	<c:forEach var="station" items="${stationList}">
-												<option value="${station.stationID}"${ticketDto.getDestinationST().equals(Integer.toString(station.getStationID())) ? "selected" : ""}>
-													${station.stationName}</option>
-											</c:forEach> -->
-										</select>
-									</div>
-									<div style="margin: 5px;">
-										<label for="depturedate" class="t1">出發日期：</label> <input
-											type="date" id="departuredate" name="departuredate"
-											th:value="${ticketDto.departuredate}" class="form-control"
-											autofocus>
-									</div>
-									<div style="margin: 5px;">
-										<label for="departuretime" class="t1">出發時間：</label> <input
-											type="text" id="departuretime" name="departuretime"
-											th:value="${ticketDto.departuretime}" class="form-control"
-											autofocus>
-									</div>
-									<div style="margin: 5px;">
-										<label for="arrivaltime" class="t1"> 抵達時間： </label> <input
-											type="text" id="arrivaltime" name="arrivaltime"
-											th:value="${ticketDto.arrivaltime}" class="form-control"
-											autofocus />
-									</div>
-									<div style="margin: 5px;">
-										<label for="price" class="t1">票價：</label> <input type="text"
-											id="price" name="price" th:value="${ticketDto.price}"
-											class="form-control mt-0 select-type01">
-									</div>
-									<div style="margin: 5px;">
-										<label for="bookingdate" class="t1">訂票日期：</label> <input
-											type="date" id="bookingdate" name="bookingdate"
-											th:value="${ticketDto.bookingdate}" class="form-control"
-											autofocus>
-									</div>
-									<div style="text-align: center; padding: 30px;">
-										<button type="submit" class="btn btn-dark"
-											style="margin: 10px;">${ticketDto== null ? "新增" :
-											"修改"}</button>
-										<button type="reset" th:onclick="history.back()"
-											class="btn btn-dark" style="margin: 10px;">取消</button>
-									</div>
-									<input type="hidden" name="action"
-										th:value='${ticketDto== null ? "doInsert" : "doUpdate"}' />
-								</form>
+	<div class="card-body">
+		<main>
+			<article class="container">
+				<div class="aside">
+					<div class="section">
+							<form method="post" th:action="@{/highSpeedRail/doAction}">
+							<h2 style="text-align: center;">增修資料</h2>
+							<div style="margin: 5px;">
+								<label for="ticketID" class="t1">訂票編號：</label> 
+								<div th:if="${ticketDto == null}">
+  									<input	type="text" id="ticketID" name="ticketID"
+  									 class="form-control"
+										th:autofocus>
+								</div>
+								<div th:unless="${ticketDto == null}">
+								  <input type="text" id="ticketID" name="ticketID"
+										th:value="${ticketDto?.ticketID}" class="form-control"
+										th:onclick='blur();'>
+								</div>
 							</div>
-						</div>
-					</article>
+							<div style="margin: 5px;">
+								<label for="tranNo" class="t1">班次：</label> <input type="text"
+									id="tranNo" name="tranNo" th:value="${ticketDto?.tranNo}"
+									class="form-control" th:autofocus>
+							</div>
+							<div style="margin: 5px;">
+								<label for="seat" class="t1">座位：</label> <input type="text"
+									id="seat" name="seat" th:value="${ticketDto?.seat}"
+									class="form-control" th:autofocus>
+							</div>
+							<div style="margin: 5px;">
+								<label for="DepartureST" class="t1">出發站：</label>
+								<!-- 改成用selection(下拉是選單) ↓ -->
+								<select id="DepartureST" name="departureST"
+									class="form-control mt-0 select-type01" title="出發站"
+									th:onchange="showPrice()">
+									 <option 
+									 th:each="station:${stationList}" 
+									 th:value="${station.stationID}"  
+									 th:text="${station.stationName}" 
+									 th:selected="${ticketDto?.departureST} == *{station.stationID}"></option>
+								</select>
+							</div>
+							<div style="margin: 5px;">
+								<label for="DestinationST" class="t1">抵達站：</label>
+								<!-- 改成用selection(下拉是選單) ↓ -->
+								<select id="DestinationST" name="destinationST"
+									class="form-control mt-0 select-type01" title="到達站"
+									th:onchange="showPrice()">
+									 <option 
+									 th:each="station:${stationList}" 
+									 th:value="${station.stationID}"  
+									 th:text="${station.stationName}" 
+									 th:selected="${ticketDto?.destinationST} == *{station.stationID}"></option>
+								</select>
+							</div>
+							<div style="margin: 5px;">
+								<label for="depturedate" class="t1">出發日期：</label> <input
+									type="date" id="departuredate" name="departuredate"
+									th:value="${ticketDto?.departuredate}" class="form-control"
+									autofocus>
+							</div>
+							<div style="margin: 5px;">
+								<label for="departuretime" class="t1">出發時間：</label> <input
+									type="text" id="departuretime" name="departuretime"
+									th:value="${ticketDto?.departuretime}" class="form-control"
+									th:autofocus>
+							</div>
+							<div style="margin: 5px;">
+								<label for="arrivaltime" class="t1"> 抵達時間： </label> <input
+									type="text" id="arrivaltime" name="arrivaltime"
+									th:value="${ticketDto?.arrivaltime}" class="form-control"
+									th:autofocus />
+							</div>
+							<div style="margin: 5px;">
+								<label for="price" class="t1">票價：</label> <input type="text"
+									id="price" name="price" th:value="${ticketDto?.price}"
+									class="form-control mt-0 select-type01">
+							</div>
+							<div style="margin: 5px;">
+								<label for="bookingdate" class="t1">訂票日期：</label> <input
+									type="date" id="bookingdate" name="bookingdate"
+									th:value="${ticketDto?.bookingdate}" class="form-control"
+									th:autofocus>
+							</div>
+							<div style="text-align: center; padding: 30px;">
+								<button type="submit" class="btn btn-dark" style="margin: 10px;"
+								th:text="${ticketDto== null ? '新增' : '修改'}">
+								</button>
+								<button type="reset" th:onclick="history.back()"
+									class="btn btn-dark" style="margin: 10px;">取消</button>
+							</div>
+							<input type="hidden" name="action"
+								th:value='${ticketDto== null ? "doInsert" : "doUpdate"}' />
+							<input type="hidden" id="priceInfos" name="priceInfos"
+								th:value='${priceInfos}' />
+						</form>
+					</div>
 				</div>
-			</div>
-		</div>
-	</main>
+			</article>
+		</main>
+	</div>
 	<div th:replace="~{layout/dashboardFooter}"></div>
-	<script th:src="/js/ming/BookingAdminDataPage.js"></script>
+	<script th:src="@{/js/ming/BookingAdminDataPageJS.js}"></script>
 </body>
 </html>

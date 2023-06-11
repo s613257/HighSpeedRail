@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.db.service.StationService;
-import com.tm.TravelMaster.ming.db.service.TicketService;
+import com.tm.TravelMaster.ming.db.service.TicketInfoService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TicketInfo;
@@ -22,13 +22,12 @@ import jakarta.transaction.Transactional;
 public class HighSpeedRailServiceImpl  implements HighSpeedRailService {
 
 	@Autowired
-	private TicketService ticketService;
+	private TicketInfoService ticketService;
 	
 	@Autowired
 	private StationService stationService;
 
 	public HighSpeedRailServiceImpl() {
-
 	}
 
 	@Override

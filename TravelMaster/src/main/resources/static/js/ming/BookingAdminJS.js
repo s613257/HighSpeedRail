@@ -1,13 +1,13 @@
 $(document).ready(function() {
-	document.querySelector("#queryResult").hidden = true;
+	$('#queryResult').hide();
 });
+
 var basePath = window.location.protocol + "//" + window.location.hostname + ":" + location.port + '/TM';
-console.log(basePath);
 
 function show() {
 	let table;
-	let allTicketInfoDataSource = basePath
-		+ "services/GetAllTicketInfo";
+	let allTicketInfoDataSource = basePath + "/services/GetAllTicketInfo";
+	console.log(allTicketInfoDataSource);
 	if ($.fn.dataTable.isDataTable('#queryResult')) {
 		table = $('#queryResult').DataTable();
 	} else {
@@ -16,15 +16,15 @@ function show() {
 		});
 	}
 	table.ajax.reload();
-	document.querySelector("#queryResult").hidden = false;
+	$('#queryResult').show();
 }
 
 function insertRecord() {
-	location.href = basePath + "highSpeedRail/insert";
+	location.href = basePath + "/highSpeedRail/insert";
 }
 
 function updateTarget(id) {
-	location.href = basePath + "highSpeedRail/update?id=" + id;
+	location.href = basePath + "/highSpeedRail/update?id=" + id;
 }
 
 function deleteTarget(id) {
@@ -36,7 +36,7 @@ function deleteTarget(id) {
 			document.querySelector("#search").click();
 		}
 	}
-	xhttp.open("POST", basePath + "services/DeleteTicketInfo");
+	xhttp.open("Delete", basePath + "/services/DeleteTicketInfo");
 	xhttp.setRequestHeader("Content-type",
 		"application/x-www-form-urlencoded");
 	xhttp.send("services=DeleteTicketInfo&id=" + id);

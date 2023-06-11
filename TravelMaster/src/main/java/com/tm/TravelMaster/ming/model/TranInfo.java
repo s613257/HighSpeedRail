@@ -27,7 +27,9 @@ public class TranInfo {
 	
 	@Column(name = "TrainArrivalTime")
 	private String trainArrvialTime;
-
+	
+	public TranInfo() {
+	}
 
 	public TranInfo(ResultSet rs) throws SQLException {
 		this.tranNo = rs.getString("tranNo");

@@ -8,6 +8,6 @@ public class IndexController {
 
 	@GetMapping("/layout/indexNavbar")
 	public String dashbord() {
-		return "layout/indexNavbar";
+		return "layout/index";
 	}
 }

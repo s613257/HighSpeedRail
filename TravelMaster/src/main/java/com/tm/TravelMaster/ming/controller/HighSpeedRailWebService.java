@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.dao.BookingDAO;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
-import com.tm.TravelMaster.ming.db.service.TicketService;
+import com.tm.TravelMaster.ming.db.service.TicketInfoService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
@@ -34,7 +35,7 @@ public class HighSpeedRailWebService {
 	private BookingDAO bookingDAO;
 
 	@Autowired
-	private TicketService ticketDAO;
+	private TicketInfoService ticketDAO;
 	
 	@Autowired
 	@Qualifier("highSpeedRailServiceImpl")
@@ -77,7 +78,6 @@ public class HighSpeedRailWebService {
         List<HighSpeedRailTicket> tks = ticketService.getAllBookingTk();
         Map<String, List<List<String>>> inputMap = new HashMap<String, List<List<String>>>();
         List<List<String>> dataList = new ArrayList<List<String>>();
-        inputMap.put("data", dataList);
         
         for (HighSpeedRailTicket tk : tks) {
             List<String> tkDataLst = new ArrayList<String>();
@@ -95,12 +95,13 @@ public class HighSpeedRailWebService {
             tkDataLst.add("<button class=\"btn btn-light\" onclick=\"deleteTarget(" + tk.getTicketID() + ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>");
             dataList.add(tkDataLst);
         }
+        inputMap.put("data", dataList);
         
         String json = new Gson().toJson(inputMap);
         return json;
     }
 
-    @PostMapping(value="/DeleteTicketInfo", produces = "application/json; charset=utf-8")
+    @DeleteMapping(value="/DeleteTicketInfo", produces = "application/json; charset=utf-8")
     @ResponseBody
     public String DeleteTicketInfo(@RequestParam("id") String id) {
         boolean isSucceed = ticketDAO.deleteTickerInfoById(Integer.parseInt(id));

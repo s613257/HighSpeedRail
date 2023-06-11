@@ -22,7 +22,6 @@ public class HighSpeedRailTicket {
 	private String bookingdate;
 
 	public HighSpeedRailTicket() {
-
 	}
 	
 	public HighSpeedRailTicket(TicketInfo tickDto) {

@@ -8,6 +8,6 @@ public class DashbordController {
 
 	@GetMapping("/layout/dashboardNavbar")
 	public String dashbord() {
-		return "layout/dashboardNavbar";
+		return "layout/dashboard";
 	}
 }

@@ -42,6 +42,9 @@ public class TicketInfo {
 	
 	@Column(name = "BookingDate")
 	private String bookingdate;
+	
+	public TicketInfo() {
+	}
 
 	public TicketInfo(HighSpeedRailTicket bkdto) {
 		setTicketID(bkdto.getTicketID());
