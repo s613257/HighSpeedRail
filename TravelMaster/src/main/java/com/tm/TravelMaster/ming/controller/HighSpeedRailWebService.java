@@ -34,11 +34,10 @@ public class HighSpeedRailWebService {
 	private BookingDAO bookingDAO;
 
 	@Autowired
-	private TicketInfoService ticketDAO;
+	private TicketInfoService ticketsService;
 	
 	@Autowired
-	@Qualifier("highSpeedRailServiceImpl")
-	private HighSpeedRailService ticketService;
+	private HighSpeedRailService highSpeedRailService;
 	
     @GetMapping("/GetTranInfo")
     @ResponseBody
@@ -74,7 +73,7 @@ public class HighSpeedRailWebService {
     @GetMapping("/GetAllTicketInfo")
     @ResponseBody
     public String GetAllTicketInfo() {
-        List<HighSpeedRailTicket> tks = ticketService.getAllBookingTk();
+        List<HighSpeedRailTicket> tks = highSpeedRailService.getAllBookingTk();
         Map<String, List<List<String>>> inputMap = new HashMap<String, List<List<String>>>();
         List<List<String>> dataList = new ArrayList<List<String>>();
         
@@ -100,11 +99,13 @@ public class HighSpeedRailWebService {
         return json;
     }
 
-    @DeleteMapping(value="/DeleteTicketInfo", produces = "application/json; charset=utf-8")
+    @GetMapping(value="/DeleteTicketInfo", produces = "application/json; charset=utf-8")
     @ResponseBody
     public String DeleteTicketInfo(@RequestParam("id") String id) {
-        ticketDAO.deleteTickerInfoById(Integer.parseInt(id));
-		return id;
+    	 boolean isSucceed = ticketsService.deleteTickerInfoById(Integer.parseInt(id));
+         String msg = Boolean.toString(isSucceed) ;
+         String json = String.format("{\"id\":\"%s\", \"result\":%s}", id,msg);
+         return json;
     }
 
 }

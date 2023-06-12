@@ -1,13 +1,14 @@
+
 $(document).ready(function() {
 	$('#queryResult').hide();
 });
 
-var basePath = window.location.protocol + "//" + window.location.hostname + ":" + location.port + '/TM';
+//var basePath = window.location.protocol + "//" + window.location.hostname + ":" + location.port + '/TM';
 
 function show() {
 	let table;
-	let allTicketInfoDataSource = basePath + "/services/GetAllTicketInfo";
-	console.log(allTicketInfoDataSource);
+	let allTicketInfoDataSource = "services/GetAllTicketInfo";
+
 	if ($.fn.dataTable.isDataTable('#queryResult')) {
 		table = $('#queryResult').DataTable();
 	} else {
@@ -20,40 +21,54 @@ function show() {
 }
 
 function insertRecord() {
-	location.href = basePath + "/highSpeedRail/insert";
+	location.href = `highSpeedRail/insert`;
+
 }
 
 function updateTarget(id) {
-	location.href = basePath + "/highSpeedRail/update?id=" + id;
+	location.href = `highSpeedRail/update?id=${id}`;
 }
 
-function deleteTarget(id) {
-	const xhttp = new XMLHttpRequest();
-	xhttp.onload = function() {
-		if (this.status === 200) {
-			deleteResult = JSON.parse(this.response);
-			Swal.fire({
-				title: '是否刪除?',
-				icon: 'warning',
-				showCancelButton: true,
-				cancelButtonColor: '#d33',
-				confirmButtonText: '取消',
-				confirmButtonColor: '#3085d6',
-				confirmButtonText: '確定'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Swal.fire(
-						'Deleted!',
-						'刪除成功',
-						'success'
-					)
+function deleteTarget(deleteTarget) {
+	Swal.fire({
+		title: '是否刪除?',
+		icon: 'warning',
+		showCancelButton: true,
+		cancelButtonText: '取消',
+		confirmButtonText: '確定',
+		preConfirm: async () => {
+			console.log("id=" + deleteTarget);
+			try {
+				const response = await fetch(`services/DeleteTicketInfo?id=${deleteTarget}`);
+				if (!response.ok) {
+					throw new Error(response.statusText);
 				}
-				$("#search").click();
-			})
+				return await response.json();
+			} catch (error) {
+				Swal.showValidationMessage(
+					`Request failed: ${error}`
+				);
+			}
+		},
+		allowOutsideClick: () => !Swal.isLoading()
+	}).then((result) => {
+		if (result.isConfirmed) {
+			let resultObj = result.value;
+			if (resultObj.result) {
+				Swal.fire(
+					'刪除成功',
+					`紀錄刪除成功(id="${resultObj.id}")`,
+					'success'
+				);
+				document.querySelector("#search").click();
+			} else {
+				Swal.fire(
+					'刪除失敗',
+					`紀錄刪除失敗(id="${resultObj.id}")`,
+					'error'
+				);
+			}
 		}
-	}
-	xhttp.open("Delete", basePath + "/services/DeleteTicketInfo");
-	xhttp.setRequestHeader("Content-type",
-		"application/x-www-form-urlencoded");
-	xhttp.send("services=DeleteTicketInfo&id=" + id);
+	});
+
 }

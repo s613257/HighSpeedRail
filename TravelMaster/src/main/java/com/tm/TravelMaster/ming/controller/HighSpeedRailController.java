@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
-import com.tm.TravelMaster.ming.db.service.PriceService;
-import com.tm.TravelMaster.ming.db.service.StationService;
+import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.db.service.TicketInfoService;
 import com.tm.TravelMaster.ming.model.TicketInfo;
 
@@ -23,17 +22,10 @@ import com.tm.TravelMaster.ming.model.TicketInfo;
 public class HighSpeedRailController {
 
 	@Autowired
-	private StationService stationService;
-
-	@Autowired
 	private TicketInfoService ticketsService;
 	
 	@Autowired
-	private PriceService priceService;
-
-	@Autowired
-	@Qualifier("highSpeedRailServiceImpl")
-	private HighSpeedRailService ticketService;
+	private HighSpeedRailService highSpeedRailService;
 
 	@GetMapping("")
 	public String index(Model model) {
@@ -42,7 +34,7 @@ public class HighSpeedRailController {
 
 	@GetMapping("/insert")
 	public String insert(Model model) {
-		model.addAttribute("stationList", stationService.findAllStationInfo());
+		model.addAttribute("stationList", highSpeedRailService.findAllStationInfo());
 		model.addAttribute("priceInfos", GetAllPriceInfo());
 		return "ming/BookingAdminDataPage";
 	}
@@ -50,14 +42,14 @@ public class HighSpeedRailController {
     @GetMapping("/update")
     public String update(Model model, @RequestParam("id") String id) {
         TicketInfo ticketDto = ticketsService.findTicketInfoById(Integer.parseInt(id));
-        model.addAttribute("stationList", stationService.findAllStationInfo());
+        model.addAttribute("stationList", highSpeedRailService.findAllStationInfo());
         model.addAttribute("priceInfos", GetAllPriceInfo());
         model.addAttribute("ticketDto", ticketDto);
         return "ming/BookingAdminDataPage";
     }
     
     private String GetAllPriceInfo() {
-    	String json = new Gson().toJson(priceService.findAllPriceInfo());
+    	String json = new Gson().toJson(highSpeedRailService.findAllPriceInfo());
     	return json;
     }
 
