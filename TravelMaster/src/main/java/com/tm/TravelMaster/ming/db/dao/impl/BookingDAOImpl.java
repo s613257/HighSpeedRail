@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 
 @Repository
 @Transactional
-public class BookingDAOImpl  implements BookingDAO {
+public class BookingDAOImpl {
 	
 
 	@Autowired
@@ -54,24 +54,6 @@ public class BookingDAOImpl  implements BookingDAO {
 		return resultTranList;
 	}
 	
-	@Override
-	public Map<Set<String> , Integer> getAllPriceInfo() {
-		List<PriceInfo> priceList = getInfoByPrice();
-		Map<Set<String> , Integer> result = new HashMap<Set<String> , Integer>();
-		for(PriceInfo price: priceList) {
-			Set<String> tmpS = new HashSet<String>();
-			tmpS.add(price.getDepartureST());
-			tmpS.add(price.getDestinationST());
-			result.put(tmpS, price.getPrice());
-		}		
-		return result;
-	}
-	
-	@Override
-	public List<PriceInfo> getInfoByPrice() {
-		Session session = factory.openSession();
-		Query<PriceInfo> query = session.createQuery("from PriceInfo",PriceInfo.class);
-		return query.list();
-	}
+
 
 }
