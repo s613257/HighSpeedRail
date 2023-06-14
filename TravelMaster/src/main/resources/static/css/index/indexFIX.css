@@ -1,17 +1,10 @@
-.container {
-	width: 500px;
+@charset "utf-8";
+
+.navbar-nav{
+    align-items: center;
 }
 
-.aside {
-	border: 2px solid rgb(215, 211, 211);
-	border-radius: 30px;
-	background-color: #FFF;
-	box-shadow: 3px 3px 3px gray;
-	margin: 10px 0px 0px 0px;
+li {
+	padding: 4.5px 0;
 }
 
-.section {
-	border-radius: 5px;
-	padding: 40px 40px 5px 40px;
-	line-height: 2em;
-}

@@ -29,7 +29,7 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-			<a th:href="@{/}" class="navbar-brand mx-auto mx-lg-0"> <i
+			<a th:href="@{/layout/index}" class="navbar-brand mx-auto mx-lg-0"> <i
 				class="fa-solid fa-martini-glass-citrus"></i> <span
 				class="brand-text">TM</span>
 			</a>
@@ -68,48 +68,41 @@
 					<li class="nav-item"><a class="nav-link click-scroll"
 						th:href="@{#section_8}"><i class="fa-solid fa-phone"></i> 聯繫</a></li>
 						
-		<!--	<%
-			Member mb = (Member) request.getSession().getAttribute("mbsession");
-			if (mb != null) {
-			%> -->
-				<div class="dropdown">
-					<a class="nav-link custom-btn btn d-none d-lg-block" th:href="@{/}" role="button"
-						id="dropdownMenuLink" data-bs-toggle="dropdown"
-						aria-expanded="false"> Hi, <!--  <%=mb.getMemberName()%> --></a>
-	
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-						<li><a class="dropdown-item" th:href="@{/}">後台管理</a>
-						</li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-						<li><a class="dropdown-item"
-							th:href="@{/}">登出</a></li>
-		<!-- 	<%
-			} else {
-			%>  -->
-						<li class="nav-item">
-				            <a class="nav-link custom-btn btn d-none d-lg-block" th:href="@{/}"><i class="fa-solid fa-arrow-right-to-bracket"></i> 登入</a>
-				        </li>
-					</ul>
-				</div>
-		<!-- 	<%
-			}
-			%> -->
+			
+					<li class="nav-item" th:if="${session.mbsession == null}">
+					    <a class="nav-link custom-btn btn d-none d-lg-block" th:href="@{/login.controller}">
+					        <i class="fa-solid fa-arrow-right-to-bracket"></i> 登入
+					    </a>
+					</li>
+					
+					<li class="nav-item" th:if="${session.mbsession != null}">	
+						<div class="dropdown" >
+							  <a class="nav-link custom-btn btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							    Hi,[[${session.mbsession.memberName}]]
+							  </a>
+							
+							  <ul class="dropdown-menu">
+							    <li><a class="dropdown-item" th:href="@{/}">後台管理</a></li>
+							    <li><a class="dropdown-item" th:href="@{/logout.controller}">登出</a></li>
+							  </ul>
+						</div>
+					</li>
+					
 				</ul>
+				
+			</div>
+		 
+
 	</nav>
 	
 <!-- JAVASCRIPT FILES -->
 <script th:src="@{/js/index/jquery.min.js}"></script>
+<script src="https://unpkg.com/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script th:src="@{/js/index/bootstrap.min.js}"></script>
 <script th:src="@{/js/index/jquery.sticky.js}"></script>
-<script th:src="@{/js/index/click-scroll.js}"></script>
 <script th:src="@{/js/index/custom.js}"></script>
+<script th:src="@{/js/dashboard/bootstrap.bundle.min.js}"></script>
 <script src="https://kit.fontawesome.com/0a9f356c66.js" crossorigin="anonymous"></script>
-
-	<script>
-	
-	</script>
 
 </body>
 </html>

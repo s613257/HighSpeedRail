@@ -35,9 +35,9 @@ public class HighSpeedRailWebService {
     @GetMapping("/GetTranInfo")
     @ResponseBody
     public String GetTranInfo(
-            @RequestParam("departure_ST") String departureST,
-            @RequestParam("destination_ST") String destinationST,
-            @RequestParam("departure_time") String departureTime) {
+            @RequestParam("departureST") String departureST,
+            @RequestParam("destinationST") String destinationST,
+            @RequestParam("departureTime") String departureTime) {
         try {
             List<TicketInfo> tranInfos = highSpeedRailService.getAllTranInfo();
             List<TicketInfo> tranTimeLst = new ArrayList<TicketInfo>();
