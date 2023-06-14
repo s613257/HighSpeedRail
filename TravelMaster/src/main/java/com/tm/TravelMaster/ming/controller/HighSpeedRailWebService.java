@@ -9,16 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
-import com.tm.TravelMaster.ming.db.dao.BookingDAO;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.db.service.TicketInfoService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
@@ -29,10 +26,6 @@ import com.tm.TravelMaster.ming.model.TicketInfo;
 @RequestMapping("/services")
 public class HighSpeedRailWebService {
 	
-	@Autowired
-	@Qualifier("bookingDAOImpl")
-	private BookingDAO bookingDAO;
-
 	@Autowired
 	private TicketInfoService ticketsService;
 	
@@ -46,7 +39,7 @@ public class HighSpeedRailWebService {
             @RequestParam("destination_ST") String destinationST,
             @RequestParam("departure_time") String departureTime) {
         try {
-            List<TicketInfo> tranInfos = bookingDAO.getAllTranInfo();
+            List<TicketInfo> tranInfos = highSpeedRailService.getAllTranInfo();
             List<TicketInfo> tranTimeLst = new ArrayList<TicketInfo>();
             
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
