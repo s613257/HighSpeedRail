@@ -16,10 +16,12 @@ import org.springframework.stereotype.Service;
 import com.tm.TravelMaster.ming.db.repos.PriceInfoRepository;
 import com.tm.TravelMaster.ming.db.repos.StationInfoRepository;
 import com.tm.TravelMaster.ming.db.repos.TrainInfoRepository;
+import com.tm.TravelMaster.ming.db.repos.TrainTimeInfoRepostory;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.PriceInfo;
 import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TicketInfo;
+import com.tm.TravelMaster.ming.model.TrainTimeInfo;
 import com.tm.TravelMaster.ming.model.TranInfo;
 
 @Service
@@ -38,8 +40,7 @@ public class HighSpeedRailService {
 	private PriceInfoRepository priceInfoRepos;
 	
 	@Autowired
-	private SessionFactory factory;
-	
+	private TrainTimeInfoRepostory trainTimeInfoRepostory;
 	
 	public List<StationInfo> findAllStationInfo(){
 		return stationInfoRepos.findAll();
@@ -54,32 +55,10 @@ public class HighSpeedRailService {
 	}
 	
 	//查詢時刻表
-	public List<TicketInfo> getAllTranInfo() {
-		return getAllTranInfoBySql("select "
-				+ "TicketID = 0, "
-				+ "BookingDate = getdate(), "
-				+ "price = 0, "
-				+ "Seat = 0, "
-				+ "DepartureDate =  getdate(), "
-				+ "dep_st.TranNo TranNo, "
-				+ "dep_st.StationID DepartureST,"
-				+ "dep_st.TrainArrivalTime Departuretime, "
-				+ "des_st.StationID DestinationST,"
-				+ "des_st.TrainArrivalTime Arrivaltime "
-				+ "from TranInfo dep_st " 
-				+ "left join TranInfo des_st on dep_st.TranNo = des_st.TranNo and dep_st.TrainArrivalTime <> des_st.TrainArrivalTime "
-				+ "and des_st.TrainArrivalTime > dep_st.TrainArrivalTime "
-				+ "where des_st.StationID is not null;");
+	public List<TrainTimeInfo> getAllTrainTimeInfo() {
+		
+		return trainTimeInfoRepostory.getTrainTimeInfo();
 	}
-	
-	private List<TicketInfo> getAllTranInfoBySql(String sql) {
-		Session session = factory.openSession();
-		List<TicketInfo> resultTranList = new ArrayList<TicketInfo>();
-		Query<TicketInfo> query = session.createQuery(sql,TicketInfo.class);
-		resultTranList= query.list();
-		return resultTranList;
-	}
-	
 	
 	//查詢單筆訂票資訊
 	public HighSpeedRailTicket getBookingTkById(int ticketID) {

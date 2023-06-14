@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.db.service.TicketInfoService;
 import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.TicketInfo;
+import com.tm.TravelMaster.ming.model.TrainTimeInfo;
 
 
 @Controller
@@ -32,25 +34,26 @@ public class HighSpeedRailWebService {
 	@Autowired
 	private HighSpeedRailService highSpeedRailService;
 	
-    @GetMapping("/GetTranInfo")
+
+	@GetMapping(value="/GetTranInfo", produces = "application/json; charset=utf-8")
     @ResponseBody
     public String GetTranInfo(
             @RequestParam("departureST") String departureST,
             @RequestParam("destinationST") String destinationST,
             @RequestParam("departureTime") String departureTime) {
         try {
-            List<TicketInfo> tranInfos = highSpeedRailService.getAllTranInfo();
-            List<TicketInfo> tranTimeLst = new ArrayList<TicketInfo>();
+            List<TrainTimeInfo> trainTimeInfos = highSpeedRailService.getAllTrainTimeInfo();
+            List<TrainTimeInfo> tranTimeLst = new ArrayList<TrainTimeInfo>();
             
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
             
             Date departureTimeObj = sdf.parse(departureTime);
-            for (TicketInfo tranInfo : tranInfos) {
-                if (tranInfo.getDepartureST().equals(departureST) && 
-                        tranInfo.getDestinationST().equals(destinationST)) {
-                    Date departureStTime = sdf.parse(tranInfo.getDeparturetime());
+            for (TrainTimeInfo trainTimeInfo : trainTimeInfos) {
+                if (trainTimeInfo.getDepartureST().equals(departureST) && 
+                		trainTimeInfo.getDestinationST().equals(destinationST)) {
+                    Date departureStTime = sdf.parse(trainTimeInfo.getDepartureTime());
                     if (departureTimeObj.compareTo(departureStTime) < 0) {
-                        tranTimeLst.add(tranInfo);
+                        tranTimeLst.add(trainTimeInfo);
                     }
                 }
             }
