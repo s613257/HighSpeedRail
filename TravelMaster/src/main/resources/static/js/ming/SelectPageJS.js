@@ -37,10 +37,9 @@ function showPrice() {
 function search() {
 	let departureST = document.querySelector("#departureST");
 	let destinationST = document.querySelector("#destinationST");
-	//let typeOfTicket = document.querySelector("#typeOfTicket");
 	let departuredate = document.querySelector("#departuredate");
 	let departureTime = document.querySelector("#departureTime");
-	/*if (parseInt(departureST.value) == parseInt(destinationST.value)) {
+	if (parseInt(departureST.value) == parseInt(destinationST.value)) {
 		alert("起程站 與 到達站 相同")
 		return;
 	}
@@ -51,7 +50,7 @@ function search() {
 	if (departureTime.value == "") {
 		alert("請選擇出發時刻")
 		return;
-	}*/
+	}
 
 	let queryResult = document.querySelector("#queryResult");
 	let from_st = document.querySelector("#from_st");
@@ -92,10 +91,13 @@ function placeQueryContent(tranInfos) {
 			let infoRow = document.createElement("tr");
 			let tranNo = document.createElement("td");
 			tranNo.innerHTML = tranInfo.tranNo;
+			tranNo.classList.add("fs-5");
 			let dep_time = document.createElement("td");
 			dep_time.innerHTML = tranInfo.departureTime;
+			dep_time.classList.add("fs-5");
 			let arr_time = document.createElement("td");
 			arr_time.innerHTML = tranInfo.arrivalTime;
+			arr_time.classList.add("fs-5");
 			let diff_time = document.createElement("td");
 			let arrTime = arr_time.innerHTML.split(":");
 			arrTime = parseInt(arrTime[0]) * 60 + parseInt(arrTime[1]);
@@ -104,6 +106,7 @@ function placeQueryContent(tranInfos) {
 			depTime = parseInt(depTime[0]) * 60 + parseInt(depTime[1]);
 			let timeDiff = Math.abs(depTime - arrTime);
 			diff_time.innerHTML = parseInt(timeDiff / 60) + "&nbsp;小時&nbsp;" + timeDiff % 60 + "&nbsp;分";
+			diff_time.classList.add("fs-5");
 			//diff_time.innerHTML = arr_time.value - dep_time.value
 			//diff_time.innerHTML = Math.abs(arrTime.toDateString() - depTime.toDateString());
 

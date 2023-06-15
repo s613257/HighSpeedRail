@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashbordController {
 
-	@GetMapping("/layout/dashboardNavbar")
+	@GetMapping("/Choose")
 	public String dashbord() {
-		return "layout/dashboard";
+		return "ming/ChoosePage";
 	}
 }
