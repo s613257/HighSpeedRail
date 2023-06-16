@@ -82,6 +82,6 @@ function show() {
 
 $(function() {
 	$('#submit').on("click", function() {
-		Swal.fire('您的訂票已完成!', '請至會員專區查閱電子票券', 'success');
+		Swal.fire('您的訂票已完成!', '請至會員專區查閱電子票券', 'success'); 
 	})
 })
