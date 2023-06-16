@@ -26,10 +26,10 @@ public class TrainTimeInfo {
 	@Column(name = "DestinationST")
 	private String destinationST;
 	
-	@Column(name = "Departuretime")
+	@Column(name = "DepartureTime")
 	private String departureTime;
 	
-	@Column(name = "Arrivaltime") 
+	@Column(name = "ArrivalTime")
 	private String arrivalTime;
 
 
