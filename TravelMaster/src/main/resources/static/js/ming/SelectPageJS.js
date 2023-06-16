@@ -33,13 +33,14 @@ function showPrice() {
 	});
 }
 
-
-function search() {
+var currPageNum = 1;
+function search(pageNum = 1) {
+	currPageNum = pageNum;
 	let departureST = document.querySelector("#departureST");
 	let destinationST = document.querySelector("#destinationST");
 	let departuredate = document.querySelector("#departuredate");
 	let departureTime = document.querySelector("#departureTime");
-	if (parseInt(departureST.value) == parseInt(destinationST.value)) {
+	/*if (parseInt(departureST.value) == parseInt(destinationST.value)) {
 		alert("起程站 與 到達站 相同")
 		return;
 	}
@@ -50,7 +51,7 @@ function search() {
 	if (departureTime.value == "") {
 		alert("請選擇出發時刻")
 		return;
-	}
+	}*/
 
 	let queryResult = document.querySelector("#queryResult");
 	let from_st = document.querySelector("#from_st");
@@ -60,10 +61,15 @@ function search() {
 	to_st.innerHTML = destinationST.options[destinationST.selectedIndex].text;
 	dep_date.innerHTML = departuredate.value;
 
-	fetch(`services/GetTranInfo?
+	/*fetch(`services/GetTranInfo?
 			departureST=${departureST.value}&
 			destinationST=${destinationST.value}&
-			departureTime=${departureTime.value}`, {
+			departureTime=${departureTime.value}&*/
+	fetch(`services/GetTranInfo?
+			departureST=${3}&
+			destinationST=${4}&
+			departureTime=${"06:00"}&
+			p=${currPageNum}`, {
 		method: "GET",
 		headers: {
 			'Content-Type': 'application/json'
@@ -75,17 +81,94 @@ function search() {
 			throw new Error("Error: " + response.status);
 		}
 	}).then(data => {
-		placeQueryContent(data);
+		//console.log(data);
+		let totalPageNumber = Math.ceil(data.total / data.pageable.size);
+		//console.log(totalPageNumber);
+		placeQueryContent(data.content);
+		createPageButton(totalPageNumber);
 		queryResult.style.display = "";
 	}).catch(error => {
 		console.error(error);
 	});
 }
 
+function createPageButton(totalPageNumber) {
+	let paginationField = document.querySelector("#pagination");
+	paginationField.innerHTML = "";
+	let pagination_ul = document.createElement("ul");
+	pagination_ul.className = "pagination";
+
+	let pre = document.createElement("li");
+	pre.className = "page-item";
+	let pre_a = document.createElement("a");
+	pre_a.className = "page-link";
+	pre_a.innerHTML = "上一頁";
+	pre_a.href = "#";
+	pre.appendChild(pre_a);
+	if (currPageNum == 1) {
+		pre.classList.add("disabled");
+	}
+	// pre
+	pre.addEventListener("click", () => {
+		if (currPageNum == 1) {
+			return;
+		}
+		search(currPageNum - 1);
+	});
+	pagination_ul.appendChild(pre);
+
+	for (let i = 1; i < (totalPageNumber + 1); i++) {
+		let pagination_li = document.createElement("li");
+		pagination_li.classList.add("page-item");
+		if (i == currPageNum) {
+			pagination_li.classList.add("active");
+			let pagination_span = document.createElement("span");
+			pagination_span.className = "page-link";
+			pagination_span.innerHTML = i;
+			pagination_li.appendChild(pagination_span);
+		} else {
+			let pagination_a = document.createElement("a");
+			pagination_a.className = "page-link";
+			pagination_a.innerHTML = i;
+			pagination_a.href = "#";
+			pagination_a.addEventListener("click", () => {
+				search(i);
+			});
+			pagination_li.appendChild(pagination_a);
+		}
+		pagination_ul.appendChild(pagination_li);
+	}
+
+	let next = document.createElement("li");
+	next.className = "page-item";
+	let next_a = document.createElement("a");
+	next_a.className = "page-link";
+	next_a.href = "#";
+	next_a.innerHTML = "下一頁";
+	next.appendChild(next_a);
+	// next
+	if (currPageNum == totalPageNumber) {
+
+		next.classList.add("disabled");
+
+	}
+	next.addEventListener("click", () => {
+		if (currPageNum == totalPageNumber) {
+			return;
+		}
+		search(currPageNum + 1);
+	});
+	pagination_ul.appendChild(next);
+
+	paginationField.appendChild(pagination_ul);
+
+
+}
+
 function placeQueryContent(tranInfos) {
 	let queryContent = document.querySelector("#queryContent");
 	queryContent.innerHTML = '';
-	console.log(tranInfos);
+	//console.log(tranInfos);
 	if (tranInfos.length > 0) {
 		tranInfos.forEach(function(tranInfo) {
 			let infoRow = document.createElement("tr");
@@ -101,7 +184,7 @@ function placeQueryContent(tranInfos) {
 			let diff_time = document.createElement("td");
 			let arrTime = arr_time.innerHTML.split(":");
 			arrTime = parseInt(arrTime[0]) * 60 + parseInt(arrTime[1]);
-			console.log(arrTime);
+			//console.log(arrTime);
 			let depTime = dep_time.innerHTML.split(":");
 			depTime = parseInt(depTime[0]) * 60 + parseInt(depTime[1]);
 			let timeDiff = Math.abs(depTime - arrTime);
@@ -112,13 +195,14 @@ function placeQueryContent(tranInfos) {
 
 			let booking = document.createElement("td");
 			let booking_btn = document.createElement("button");
+			booking_btn.type = "button";
 			booking_btn.innerHTML = "訂票";
 
 
 			booking.appendChild(booking_btn);
 			booking_btn.classList.add("btn");
 			booking_btn.classList.add("btn-secondary");
-			booking_btn.onclick = function() { };
+			booking_btn.onclick = function() { choose(tranInfo) };
 
 			infoRow.appendChild(tranNo);
 			infoRow.appendChild(dep_time);
@@ -132,3 +216,20 @@ function placeQueryContent(tranInfos) {
 		queryContent.innerHTML = '<td colspan="5" class="align-center justify-content-center text-center"><i>無結果</i></td>';
 	}
 }
+
+function choose(tranInfo) {
+	console.log(tranInfo);
+	let parmLst = "id,tranNo,arrivalTime,departureST,departureTime,destinationST".split(",");
+	let submitForm = document.createElement("form")
+	submitForm.method = "POST";
+	submitForm.action = `choose`;
+	parmLst.forEach((parm) => {
+		var tmpInput = document.createElement("input");
+		tmpInput.setAttribute("name", parm);
+		tmpInput.setAttribute("value", tranInfo[parm]);
+		submitForm.appendChild(tmpInput);
+	});
+ 	document.body.appendChild(submitForm);
+  	submitForm.submit();
+}
+

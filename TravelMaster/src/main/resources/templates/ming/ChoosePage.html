@@ -64,12 +64,14 @@
 										<div class="row">
 											<div class="form-floating mb-3 col-6">
 												<div class="form-control" id="DepartureStation"
-													style="text-align: center;">桃園</div>
+													style="text-align: center;"
+													th:text="${trainTimeInfo.getDepartureST()}"></div>
 												<label for="DepartureStation">出發站：</label>
 											</div>
 											<div class="form-floating mb-3 col-6">
 												<div class="form-control" id="ArrivalStation"
-													style="text-align: center;">板橋</div>
+													style="text-align: center;"
+													th:text="${trainTimeInfo.getDestinationST()}"></div>
 												<label for="ArrivalStation">抵達站：</label>
 											</div>
 										</div>
@@ -80,12 +82,13 @@
 										<div class="row">
 											<div class="form-floating mb-3 col-6">
 												<div class="form-control" id="price"
-													style="text-align: center;">xx元</div>
+													style="text-align: center;"
+													th:text="${singlePrice} + '&nbsp;元'"></div>
 												<label for="price">每張單價：</label>
 											</div>
 											<div class="form-floating mb-3 col-6">
 												<div class="form-control" id="priceTotal"
-													style="text-align: center;">xx元</div>
+													style="text-align: center;">0&nbsp;元</div>
 												<label for="priceTotal">總共票價：</label>
 											</div>
 										</div>
@@ -94,6 +97,7 @@
 											<button type="reset" class="btn btn-dark">取消訂票</button>
 										</div>
 									</form>
+									<input type="hidden" id="singlePrice" th:value="${singlePrice}">
 								</div>
 							</div>
 						</div>
