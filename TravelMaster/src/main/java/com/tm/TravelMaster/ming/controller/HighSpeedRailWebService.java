@@ -32,17 +32,13 @@ public class HighSpeedRailWebService {
 
 	@GetMapping(value = "/GetTranInfo", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String GetTranInfo(
-			@RequestParam("departureST") String departureST,
-			@RequestParam("destinationST") String destinationST, 
-			@RequestParam("departureTime") String departureTime,
-			@RequestParam(name = "p", defaultValue = "1") 
-			Integer pageNumber, 
-			Model model) {
+	public String GetTranInfo(@RequestParam("departureST") String departureST,
+			@RequestParam("destinationST") String destinationST, @RequestParam("departureTime") String departureTime,
+			@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, Model model) {
 
-		Page<TrainTimeInfo> trainTimeInfos = 
-				highSpeedRailService.findByPage(departureST, destinationST, departureTime, pageNumber);
-		
+		Page<TrainTimeInfo> trainTimeInfos = highSpeedRailService.findByPage(departureST, destinationST, departureTime,
+				pageNumber);
+
 		String json = new Gson().toJson(trainTimeInfos);
 		return json;
 	}
