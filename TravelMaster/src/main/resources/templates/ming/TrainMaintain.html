@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>台灣高鐵班次維護</title>
+</head>
+<body>
+	<div th:replace="~{layout/dashboardHeader}"></div>
+	<main>
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">台灣高鐵班次維護</h1>
+			<hr>
+			<div class="card mb-4">
+				<div class="card-header">
+					<i class="fas fa-table me-1"></i>
+				</div>
+				<div class="card-body">
+					<article class="text-center container">
+						<section class="timetable-search-frame bg-grey">
+							<div class="container">
+								<div class="download-ttable"></div>
+								<div class="ha-nav-content">
+									<div class="p-3 mb-2 bg-light border border-2 rounded">
+										<div class="inline-input-group row">
+											<div class="col-input col">
+												<button type="button" title="查詢訂票資訊"
+													class="btn btn-secondary  mt-3" id="search"
+													th:onclick="show()">查詢班次資訊</button>
+											</div>
+											<div class="col-input col">
+												<button type="button" title="新增單筆資料"
+													class="btn btn-secondary  mt-3" id="insert"
+													th:onclick="insertRecord()">新增單筆資料</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<hr>
+									<table id="queryResult"
+										class="table table-bordered table-striped table-sm display"
+										style="width: 100%;">
+										<thead class="table-light">
+											<tr>
+												<th scope="col" class="align-middle">班次</th>
+												<th scope="col" class="align-middle"
+													th:each="station:${stationList}"
+													th:value="${station.stationID}"
+													th:text="${station.stationName}"></th>
+												<th scope="col" class="align-middle">編輯</th>
+												<th scope="col" class="align-middle">刪除</th>
+											</tr>
+										</thead>
+										<tbody id="queryContent">
+											<tr  th:each="train : ${trainInfoMap}">
+												<td th:text="${train.key}"></td>
+												<td th:text="${train.value}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</section>
+					</article>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="~{layout/dashboardFooter}"></div>
+	<script th:src="@{/js/ming/TrainMaintainJS.js}"></script>
+</body>
+</html>

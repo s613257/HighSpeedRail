@@ -61,7 +61,6 @@
 									<label class="input-smalllabel" for="typesofticket">
 										參考票價 </label> <input type="text" id="price" name="price"
 										th:value="${price}" class="form-control mt-0 select-type01">
-
 								</div>
 								<div class="col-input col">
 									<button type="button" title="查詢"
@@ -76,10 +75,10 @@
 						<div class="container" id="queryResult" style="display: none">
 							<div class="row ">
 								<div class="col d-flex justify-content-start">
-									<div id="from_st" class="d-inline p-2 fs-5"></div>
-									<div class="d-inline p-2 fs-5">→</div>
-									<div id="to_st" class="d-inline p-2 fs-5"></div>
-									<div id="dep_date" class="d-inline p-2 fs-5"></div>
+									<div id="from_st" class="d-inline p-2 fs-5"></div>	<!--  出發站 -->
+									<div class="d-inline p-2 fs-5"><i class="fa-solid fa-arrow-right"></i></div> <!-- 箭頭 -->
+									<div id="to_st" class="d-inline p-2 fs-5"></div>	<!-- 抵達站 -->
+									<div id="dep_date" class="d-inline p-2 fs-5"></div>	<!-- 出發日期 -->
 								</div>
 							</div>
 							<div class="row">
@@ -113,5 +112,6 @@
 
 	<div th:replace="~{layout/indexFooter}"></div>
 	<script th:src="@{js/ming/SelectPageJS.js}"></script>
+	<script th:src="@{/js/ming/sweetalert2.js}"></script>
 </body>
 </html>

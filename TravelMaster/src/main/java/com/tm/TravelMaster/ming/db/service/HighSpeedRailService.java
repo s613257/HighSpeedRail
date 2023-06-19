@@ -24,18 +24,22 @@ import com.tm.TravelMaster.ming.db.repos.PriceInfoRepository;
 import com.tm.TravelMaster.ming.db.repos.StationInfoRepository;
 import com.tm.TravelMaster.ming.db.repos.TrainInfoRepository;
 import com.tm.TravelMaster.ming.db.repos.TrainTimeInfoRepostory;
-import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
 import com.tm.TravelMaster.ming.model.PriceInfo;
 import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TicketInfo;
-import com.tm.TravelMaster.ming.model.TrainTimeInfo;
 import com.tm.TravelMaster.ming.model.TranInfo;
+import com.tm.TravelMaster.ming.model.dto.HighSpeedRailTicket;
+import com.tm.TravelMaster.ming.model.dto.TrainTimeInfo;
 
 @Service
 public class HighSpeedRailService {
+	
 	Logger logger = LoggerFactory.getLogger(HighSpeedRailService.class);
+	
 	private Map<Integer, String> g_stationMap = null; 
+	
 	private Map<Set<String> , Integer> g_priceInfoMap = null;
+	
 	@Autowired
 	private TicketInfoService ticketService;
 	
@@ -53,9 +57,11 @@ public class HighSpeedRailService {
 	
 	
 	//建立分頁
-	public Page<TrainTimeInfo> findByPage(String departureST, String destinationST, String departureTime, Integer pageNumber){
+	public Page<TrainTimeInfo> findByPage(
+			String departureST, String destinationST, String departureTime, Integer pageNumber){
 		Pageable pgb = PageRequest.of(pageNumber-1 , 10);
-		Page<TrainTimeInfo> page = trainTimeInfoRepostory.getTrainTimeInfo(departureST, destinationST, departureTime, pgb);
+		Page<TrainTimeInfo> page = trainTimeInfoRepostory.getTrainTimeInfo(
+				departureST, destinationST, departureTime, pgb);
 		return page;
 	}
 	

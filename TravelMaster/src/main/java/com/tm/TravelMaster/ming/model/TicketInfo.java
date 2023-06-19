@@ -3,6 +3,8 @@ package com.tm.TravelMaster.ming.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.tm.TravelMaster.ming.model.dto.HighSpeedRailTicket;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

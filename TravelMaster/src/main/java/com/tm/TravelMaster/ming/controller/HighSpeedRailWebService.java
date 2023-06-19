@@ -1,21 +1,15 @@
 package com.tm.TravelMaster.ming.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,9 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.db.service.TicketInfoService;
-import com.tm.TravelMaster.ming.model.HighSpeedRailTicket;
-import com.tm.TravelMaster.ming.model.TicketInfo;
-import com.tm.TravelMaster.ming.model.TrainTimeInfo;
+import com.tm.TravelMaster.ming.model.dto.HighSpeedRailTicket;
+import com.tm.TravelMaster.ming.model.dto.TrainTimeInfo;
 
 @Controller
 @RequestMapping("/services")
@@ -43,16 +36,14 @@ public class HighSpeedRailWebService {
 			@RequestParam("departureST") String departureST,
 			@RequestParam("destinationST") String destinationST, 
 			@RequestParam("departureTime") String departureTime,
-			@RequestParam(name = "p", defaultValue = "1") Integer pageNumber, 
+			@RequestParam(name = "p", defaultValue = "1") 
+			Integer pageNumber, 
 			Model model) {
 
 		Page<TrainTimeInfo> trainTimeInfos = 
-				highSpeedRailService.findByPage(departureST, destinationST, departureTime,pageNumber);
-		
+				highSpeedRailService.findByPage(departureST, destinationST, departureTime, pageNumber);
 		
 		String json = new Gson().toJson(trainTimeInfos);
-
-		// model.addAttribute("page", tranTimeLst);
 		return json;
 	}
 

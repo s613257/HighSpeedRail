@@ -11,7 +11,7 @@ $(document).ready(function() {
 			tmpS.add(element.pk.destinationST); // destinationST
 			priceInfos.set(tmpS, element.price);
 		});
-	}
+	} // (1,2) or (2,1) -> 40  
 
 });
 
@@ -40,18 +40,30 @@ function search(pageNum = 1) {
 	let destinationST = document.querySelector("#destinationST");
 	let departuredate = document.querySelector("#departuredate");
 	let departureTime = document.querySelector("#departureTime");
-	/*if (parseInt(departureST.value) == parseInt(destinationST.value)) {
-		alert("起程站 與 到達站 相同")
+	if (parseInt(departureST.value) == parseInt(destinationST.value)) {
+		Swal.fire(
+			'( ｣｡╹o╹｡)｣',
+			'您的 「起程站」 與 「到達站」 相同 <(ΦωΦ)>',
+			'warning'
+		)
 		return;
 	}
 	if (departuredate.value == "") {
-		alert("請選擇出發日期")
+		Swal.fire(
+			'( ｣｡╹o╹｡)｣',
+			'請記得選擇出發日期 !',
+			'warning'
+		)
 		return;
 	}
 	if (departureTime.value == "") {
-		alert("請選擇出發時刻")
+		Swal.fire(
+			'( ｣｡╹o╹｡)｣',
+			'請記得選擇出發時刻 !',
+			'warning'
+		)
 		return;
-	}*/
+	}
 
 	let queryResult = document.querySelector("#queryResult");
 	let from_st = document.querySelector("#from_st");
@@ -61,14 +73,10 @@ function search(pageNum = 1) {
 	to_st.innerHTML = destinationST.options[destinationST.selectedIndex].text;
 	dep_date.innerHTML = departuredate.value;
 
-	/*fetch(`services/GetTranInfo?
+	fetch(`services/GetTranInfo?
 			departureST=${departureST.value}&
 			destinationST=${destinationST.value}&
-			departureTime=${departureTime.value}&*/
-	fetch(`services/GetTranInfo?
-			departureST=${3}&
-			destinationST=${4}&
-			departureTime=${"06:00"}&
+			departureTime=${departureTime.value}&
 			p=${currPageNum}`, {
 		method: "GET",
 		headers: {
@@ -82,7 +90,7 @@ function search(pageNum = 1) {
 		}
 	}).then(data => {
 		//console.log(data);
-		let totalPageNumber = Math.ceil(data.total / data.pageable.size);
+		let totalPageNumber = Math.ceil(data.total / data.pageable.size);  //Math.ceil 無條件進位
 		//console.log(totalPageNumber);
 		placeQueryContent(data.content);
 		createPageButton(totalPageNumber);
@@ -95,9 +103,13 @@ function search(pageNum = 1) {
 function createPageButton(totalPageNumber) {
 	let paginationField = document.querySelector("#pagination");
 	paginationField.innerHTML = "";
+	/* bootstrap 5 pagination
+	<ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>*/
 	let pagination_ul = document.createElement("ul");
 	pagination_ul.className = "pagination";
 
+	//上一頁
 	let pre = document.createElement("li");
 	pre.className = "page-item";
 	let pre_a = document.createElement("a");
@@ -117,10 +129,11 @@ function createPageButton(totalPageNumber) {
 	});
 	pagination_ul.appendChild(pre);
 
+	//頁數
 	for (let i = 1; i < (totalPageNumber + 1); i++) {
 		let pagination_li = document.createElement("li");
 		pagination_li.classList.add("page-item");
-		if (i == currPageNum) {
+		if (i == currPageNum) {   //若為當前頁面
 			pagination_li.classList.add("active");
 			let pagination_span = document.createElement("span");
 			pagination_span.className = "page-link";
@@ -139,6 +152,7 @@ function createPageButton(totalPageNumber) {
 		pagination_ul.appendChild(pagination_li);
 	}
 
+	//下一頁
 	let next = document.createElement("li");
 	next.className = "page-item";
 	let next_a = document.createElement("a");
@@ -148,9 +162,7 @@ function createPageButton(totalPageNumber) {
 	next.appendChild(next_a);
 	// next
 	if (currPageNum == totalPageNumber) {
-
 		next.classList.add("disabled");
-
 	}
 	next.addEventListener("click", () => {
 		if (currPageNum == totalPageNumber) {
@@ -198,7 +210,6 @@ function placeQueryContent(tranInfos) {
 			booking_btn.type = "button";
 			booking_btn.innerHTML = "訂票";
 
-
 			booking.appendChild(booking_btn);
 			booking_btn.classList.add("btn");
 			booking_btn.classList.add("btn-secondary");
@@ -229,7 +240,7 @@ function choose(tranInfo) {
 		tmpInput.setAttribute("value", tranInfo[parm]);
 		submitForm.appendChild(tmpInput);
 	});
- 	document.body.appendChild(submitForm);
-  	submitForm.submit();
+	document.body.appendChild(submitForm);
+	submitForm.submit();
 }
 

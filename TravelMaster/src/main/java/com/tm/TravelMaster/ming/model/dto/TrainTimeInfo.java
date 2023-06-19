@@ -1,4 +1,6 @@
-package com.tm.TravelMaster.ming.model;
+package com.tm.TravelMaster.ming.model.dto;
+
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +21,9 @@ public class TrainTimeInfo {
 	
 	@Column(name = "TranNo")
 	private String tranNo;
+	
+	@Column(name = "DepartureDate")
+	private Date departureDate;
 	
 	@Column(name = "DepartureST")
 	private String departureST;

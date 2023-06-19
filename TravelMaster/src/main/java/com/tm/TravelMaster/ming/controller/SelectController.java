@@ -1,6 +1,5 @@
 package com.tm.TravelMaster.ming.controller;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -10,11 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
-import com.tm.TravelMaster.ming.model.TrainTimeInfo;
+import com.tm.TravelMaster.ming.model.dto.TrainTimeInfo;
 
 @Controller
 public class SelectController {
@@ -46,12 +44,10 @@ public class SelectController {
 				break;
 			}
 		}
-	
 
 		Map<Integer, String> stationMap = highSpeedRailService.getStationInfoMap();
 		trainTimeInfo.setDepartureST(stationMap.get(Integer.parseInt(trainTimeInfo.getDepartureST())));
 		trainTimeInfo.setDestinationST(stationMap.get(Integer.parseInt(trainTimeInfo.getDestinationST())));
-
 		model.addAttribute("trainTimeInfo", trainTimeInfo);
 		return "ming/ChoosePage";
 	}
