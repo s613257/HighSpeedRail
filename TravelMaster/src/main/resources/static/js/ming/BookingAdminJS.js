@@ -70,5 +70,4 @@ function deleteTarget(deleteTarget) {
 			}
 		}
 	});
-
 }

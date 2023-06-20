@@ -8,7 +8,14 @@
 	<div th:replace="~{layout/dashboardHeader}"></div>
 	<main>
 		<div class="container-fluid px-4">
-			<h1 class="mt-4">台灣高鐵班次維護</h1>
+			<div class="d-flex justify-content-between align-items-center">
+				<h1 class="mt-4">高鐵班次維護</h1>
+				<button type="button" title="新增單筆資料"
+					class="btn btn-outline-dark mt-3" id="insert"
+					th:onclick="insertRecord()">
+					<i class="fa-solid fa-plus"></i> 新增
+				</button>
+			</div>
 			<hr>
 			<div class="card mb-4">
 				<div class="card-header">
@@ -19,74 +26,67 @@
 						<section class="timetable-search-frame bg-grey">
 							<div class="container">
 								<div class="download-ttable"></div>
-								<div class="ha-nav-content">
-									<div class="p-3 mb-2 bg-light border border-2 rounded">
-										<div class="inline-input-group row">
-											<div class="col-input col">
-												<button type="button" title="新增單筆資料"
-													class="btn btn-secondary  mt-3" id="insert"
-													th:onclick="insertRecord()">新增單筆資料</button>
-											</div>
+								<div class="ha-nav-content"></div>
+
+								<div class="modal fade" id="EditField" tabindex="-1"
+									aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="input-group mb-3 w-50 p-3 modal-dialog">
+
+										<div class="input-group mb-3 p-2">
+											<span class="input-group-text" id="tranNo">班次</span> <input
+												type="text" class="form-control" id="tranNo"
+												aria-describedby="basic-addon3">
 										</div>
+
+										<div class="input-group mb-3 w-50 p-2"
+											th:each="station:${stationList}">
+											<span class="input-group-text"
+												th:text="${station.stationName}">班次</span> <input
+												class="form-control" type="time"
+												th:id="${station.stationID}" aria-describedby="basic-addon3">
+										</div>
+
+										<div class="w-100 p-2">
+											<button style="margin: 0px 30px 0px 0px;"
+												class="btn btn-secondary">送出</button>
+											<button style="margin: 0px 0px 0px 30px;"
+												class="btn btn-secondary">取消</button>
+										</div>
+
 									</div>
 								</div>
-								<div id="EditField" style="display: none">
-									<hr>
-									<table 
-										class="table table-bordered table-striped table-sm display">
-										<thead class="table-light">
-											<tr>
-												<th scope="col" class="align-middle">班次</th>
-												<th scope="col" class="align-middle"
-													th:each="station:${stationList}"
-													th:value="${station.stationID}"
-													th:text="${station.stationName}"></th>
-												<th scope="col" class="align-middle">送出</th>
-												<th scope="col" class="align-middle">取消</th>
-											</tr>
-										</thead>
-										<tbody >
-											<tr>
-												<td >
-													101
-												</td>
-												<td scope="col" class="align-middle"
-													th:each="station:${stationList}">
-													<input type="time" th:id="${station.stationID}">
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div>
-									<hr>
-									<table id="queryResult"
-										class="table table-bordered table-striped table-sm display"
-										style="width: 100%;">
-										<thead class="table-light">
-											<tr>
-												<th scope="col" class="align-middle">班次</th>
-												<th scope="col" class="align-middle"
-													th:each="station:${stationList}"
-													th:value="${station.stationID}"
-													th:text="${station.stationName}"></th>
-												<th scope="col" class="align-middle">編輯</th>
-												<th scope="col" class="align-middle">刪除</th>
-											</tr>
-										</thead>
-										<tbody >
-										</tbody>
-									</table>
-								</div>
+							</div>
+
+							<div>
+								<table id="queryResult"
+									class="table table-bordered table-striped table-sm display"
+									style="width: 100%;">
+									<thead class="table-light">
+										<tr>
+											<th scope="col" class="align-middle">班次</th>
+											<th scope="col" class="align-middle"
+												th:each="station:${stationList}"
+												th:value="${station.stationID}"
+												th:text="${station.stationName}"></th>
+											<th scope="col" class="align-middle">編輯</th>
+											<th scope="col" class="align-middle">刪除</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
 							</div>
 						</section>
 					</article>
 				</div>
 			</div>
 		</div>
-		<input type="hidden" id="dataTableContent" th:value="${dataTableContent}">
+
+		<input type="hidden" id="dataTableContent"
+			th:value="${dataTableContent}">
 	</main>
 	<div th:replace="~{layout/dashboardFooter}"></div>
 	<script th:src="@{/js/ming/TrainMaintainJS.js}"></script>
+	<script th:src="@{/js/ming/sweetalert2.js}"></script>
 </body>
 </html>

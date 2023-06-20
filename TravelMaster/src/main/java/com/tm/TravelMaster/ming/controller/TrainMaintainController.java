@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
@@ -51,7 +53,7 @@ public class TrainMaintainController {
 				String key = (String) trainNo + "," + stInfo.getStationID();
 				dataLst.add(trainInfoMap.get(key));
 			}
-			String update = "<button class=\"btn btn-light\" onclick=\"updateTarget(" + trainNo
+			String update = "<button id=\"myModal\" class=\"btn btn-light\" onclick=\"updateTarget(" + trainNo
 					+ ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>";
 			dataLst.add(update);
 			String delete = "<button class=\"btn btn-light\" onclick=\"deleteTarget(" + trainNo
@@ -66,6 +68,15 @@ public class TrainMaintainController {
 		model.addAttribute("trainNoSet", trainNoSet);
 		model.addAttribute("stationList", stationList);
 		return "ming/TrainMaintain";
+	}
+	
+	@GetMapping(value = "DeleteTranInfo", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String DeleteTicketInfo(@RequestParam("tranNo") String tranNo) {
+		boolean isSucceed = highSpeedRailService.deleteTrainInfoByTranNo(tranNo);
+		String msg = Boolean.toString(isSucceed);
+		String json = String.format("{\"id\":\"%s\", \"result\":%s}", tranNo, msg);
+		return json;
 	}
 
 }
