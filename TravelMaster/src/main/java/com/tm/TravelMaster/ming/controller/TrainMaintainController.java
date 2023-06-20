@@ -53,8 +53,8 @@ public class TrainMaintainController {
 				String key = (String) trainNo + "," + stInfo.getStationID();
 				dataLst.add(trainInfoMap.get(key));
 			}
-			String update = "<button id=\"myModal\" class=\"btn btn-light\" onclick=\"updateTarget(" + trainNo
-					+ ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>";
+			String update = "<button class=\"btn btn-light\"  data-bs-toggle=\"modal\" data-bs-target=\"#EditField\" onclick=\"updateTarget("
+					+ trainNo + ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>";
 			dataLst.add(update);
 			String delete = "<button class=\"btn btn-light\" onclick=\"deleteTarget(" + trainNo
 					+ ")\"><i class=\"fa-solid fa-trash-can\"></i> </button>";
@@ -69,7 +69,7 @@ public class TrainMaintainController {
 		model.addAttribute("stationList", stationList);
 		return "ming/TrainMaintain";
 	}
-	
+
 	@GetMapping(value = "DeleteTranInfo", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String DeleteTicketInfo(@RequestParam("tranNo") String tranNo) {

@@ -1,22 +1,27 @@
 
+var EditField;
 $(document).ready(function() {
 	let dtDataList = JSON.parse(document.querySelector("#dataTableContent").value);
 	$('#queryResult').DataTable({ data: dtDataList });
+	EditField = new bootstrap.Modal(document.getElementById('EditField'));
 });
 
-function updateTarget(tranNo) {
-	let myModal = document.getElementById("myModal");
-	let EditField = new bootstrap.Modal(document.getElementById('EditField'));
-
-	myModal.addEventListener("click", function(e) {
-		EditField.show();
-	});
-
-
-	/*$('#EditField').show();*/
+function insertRecord(){
+	EditField.show();
+	document.querySelector("#EditFieldSubmit").innerHTML =  "新增";
 }
-// func cancel => $('#EditField').hide();
+function updateTarget(tranNo) {
+	document.querySelector("#EditFieldSubmit").innerHTML =  "修改";
+	document.querySelector("#EditField_tranNo").readOnly = true;
+	document.querySelector("#EditField_tranNo").value = tranNo;
+	
+	EditField.show();
 
+}
+function cancel(){
+	EditField.hide();
+	document.querySelector("#EditField_tranNo").readOnly = false;
+}
 
 function deleteTarget(tranNo) {
 	Swal.fire({
@@ -49,7 +54,10 @@ function deleteTarget(tranNo) {
 					'刪除成功',
 					`紀錄刪除成功(班次="${resultObj.id}")`,
 					'success'
-				);
+				).then(() => {
+					// 成功刪除後重新導向
+					location.href = 'trainMaintain';
+				});
 			} else {
 				Swal.fire(
 					'刪除失敗',

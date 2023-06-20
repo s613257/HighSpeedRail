@@ -35,11 +35,10 @@ public class SelectController {
 	@PostMapping("/choose")
 	public String choosePage(TrainTimeInfo trainTimeInfo, Model model) {
 		Map<Set<String>, Integer> priceInfoMap = highSpeedRailService.getPriceInfoMap();
-		
+
 		for (Entry<Set<String>, Integer> entry : priceInfoMap.entrySet()) {
 			Set<String> s = entry.getKey();
-			if(s.contains(trainTimeInfo.getDepartureST()) && 
-			   s.contains(trainTimeInfo.getDestinationST())) {
+			if (s.contains(trainTimeInfo.getDepartureST()) && s.contains(trainTimeInfo.getDestinationST())) {
 				model.addAttribute("singlePrice", entry.getValue());
 				break;
 			}

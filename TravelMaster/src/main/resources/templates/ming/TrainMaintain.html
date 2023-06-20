@@ -28,31 +28,37 @@
 								<div class="download-ttable"></div>
 								<div class="ha-nav-content"></div>
 
-								<div class="modal fade" id="EditField" tabindex="-1"
-									aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="input-group mb-3 w-50 p-3 modal-dialog">
+								<div class="modal fade" aria-hidden="true" id="EditField">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="input-group">
+													<div class="input-group mb-3 p-2">
+														<span class="input-group-text" id="tranNo">班次</span> <input
+															type="text" class="form-control" id="EditField_tranNo"
+															name="EditField_tranNo" aria-describedby="basic-addon3">
+													</div>
+													<div class="input-group mb-3 w-50 p-2"
+														th:each="station:${stationList}">
+														<span class="input-group-text"
+															th:text="${station.stationName}"></span> <input
+															class="form-control" type="time"
+															th:id="'EditField_ST_' + ${station.stationID}"
+															th:name="'EditField_ST_' + ${station.stationID}"
+															aria-describedby="basic-addon3">
+													</div>
 
-										<div class="input-group mb-3 p-2">
-											<span class="input-group-text" id="tranNo">班次</span> <input
-												type="text" class="form-control" id="tranNo"
-												aria-describedby="basic-addon3">
+													<div class="w-100 p-2">
+														<button id="EditFieldSubmit"
+															style="margin: 0px 30px 0px 0px;"
+															class="btn btn-secondary">送出</button>
+														<button style="margin: 0px 0px 0px 30px;"
+															data-bs-dismiss="modal" th:onclick="cancel()"
+															class="btn btn-secondary">取消</button>
+													</div>
+												</div>
+											</div>
 										</div>
-
-										<div class="input-group mb-3 w-50 p-2"
-											th:each="station:${stationList}">
-											<span class="input-group-text"
-												th:text="${station.stationName}">班次</span> <input
-												class="form-control" type="time"
-												th:id="${station.stationID}" aria-describedby="basic-addon3">
-										</div>
-
-										<div class="w-100 p-2">
-											<button style="margin: 0px 30px 0px 0px;"
-												class="btn btn-secondary">送出</button>
-											<button style="margin: 0px 0px 0px 30px;"
-												class="btn btn-secondary">取消</button>
-										</div>
-
 									</div>
 								</div>
 							</div>
@@ -86,7 +92,93 @@
 			th:value="${dataTableContent}">
 	</main>
 	<div th:replace="~{layout/dashboardFooter}"></div>
-	<script th:src="@{/js/ming/TrainMaintainJS.js}"></script>
+	<!-- <script th:src="@{/js/ming/TrainMaintainJS.js}"></script> -->
+	<script th:inline="javascript">
+	
+var EditField;
+var dtDataList;
+$(document).ready(function() {
+ 	dtDataList = JSON.parse(document.querySelector("#dataTableContent").value);
+	$('#queryResult').DataTable({ data: dtDataList });
+	EditField = new bootstrap.Modal(document.getElementById('EditField'));
+});
+
+function insertRecord(){
+	EditField.show();
+	document.querySelector("#EditFieldSubmit").innerHTML =  "新增";
+}
+function updateTarget(tranNo) {
+	document.querySelector("#EditFieldSubmit").innerHTML =  "修改";
+	document.querySelector("#EditField_tranNo").readOnly = true;
+	document.querySelector("#EditField_tranNo").value = tranNo;
+	let timeLst;
+	dtDataList.forEach((dl)=>{ // dtDataList: [[tranNo1,t1a,t1b,...],[tranNo2,t2a,t2b,...],[tranNo2,t2a,t2b,...]]
+	// dl: [tranNo,t1,t1,...]
+		if(dl[0] == tranNo){ // dl[0] => tranNo
+			timeLst = dl;
+		}
+	});
+	let StLst = [[${stationList}]];
+	let current_st = 1;
+	StLst.forEach((st)=>{
+	 document.querySelector("#EditField_ST_" + st.stationID).value = timeLst[current_st];
+	 current_st++ ;
+	});
+	EditField.show();
+
+}
+
+function cancel(){
+	EditField.hide();
+	document.querySelector("#EditField_tranNo").readOnly = false;
+}
+
+function deleteTarget(tranNo) {
+	Swal.fire({
+		title: '是否刪除?',
+		icon: 'warning',
+		showCancelButton: true,
+		cancelButtonText: '取消',
+		confirmButtonText: '確定',
+		preConfirm: async () => {
+			console.log("tranNo=" + deleteTarget);
+			try {
+				const response = await fetch(`DeleteTranInfo?tranNo=${tranNo}`);
+				if (!response.ok) {
+					throw new Error(response.statusText);
+				}
+				return await response.json();
+			} catch (error) {
+				Swal.showValidationMessage(
+					`Request failed: ${error}`
+				);
+			}
+		},
+		allowOutsideClick: () => !Swal.isLoading()
+	}).then((result) => {
+		if (result.isConfirmed) {
+			let resultObj = result.value;
+			console.log(resultObj);
+			if (resultObj.result) {
+				Swal.fire(
+					'刪除成功',
+					`紀錄刪除成功(班次="${resultObj.id}")`,
+					'success'
+				).then(() => {
+					// 成功刪除後重新導向
+					location.href = 'trainMaintain';
+				});
+			} else {
+				Swal.fire(
+					'刪除失敗',
+					`紀錄刪除失敗(班次="${resultObj.id}")`,
+					'error'
+				);
+			}
+		}
+	});
+}
+</script>
 	<script th:src="@{/js/ming/sweetalert2.js}"></script>
 </body>
 </html>
