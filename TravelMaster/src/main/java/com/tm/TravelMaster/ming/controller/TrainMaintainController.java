@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -43,7 +44,7 @@ public class TrainMaintainController {
 
 		List<StationInfo> stationList = highSpeedRailService.findAllStationInfo();
 
-		// --- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+		// --- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ dataTable 
 		List<List<String>> dataTableContentList = new ArrayList<List<String>>();
 
 		for (Object trainNo : trainNoSet.toArray()) {
@@ -77,6 +78,17 @@ public class TrainMaintainController {
 		String msg = Boolean.toString(isSucceed);
 		String json = String.format("{\"id\":\"%s\", \"result\":%s}", tranNo, msg);
 		return json;
+	}
+	
+	@PostMapping("trainMaintain")
+	public String updateorInsrty(@RequestParam("parmLst") String parmLst, Model model){
+//		List<TranInfo> list = highSpeedRailService.findAllTranInfo();
+//		List<StationInfo> stationList = highSpeedRailService.findAllStationInfo();
+		highSpeedRailService.updateByTranNo(parmLst, parmLst, parmLst);
+		model.addAttribute("parmLst", parmLst);
+		
+		return "redirect:/trainMaintain";
+		
 	}
 
 }

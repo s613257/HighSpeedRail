@@ -14,13 +14,10 @@ public interface TrainInfoRepository extends JpaRepository<TranInfo, Integer>{
 	public void deleteByTranNo(@Param("tranNo") String tranNo);
 
 	@Modifying
-	@Query(value="update from TranInfo set "
-			+ "stationID=:stationID, "
-			+ "trainArrvialTime=:trainArrvialTime "
-			+ "where tranNo=:tranNo", nativeQuery = true)
+	@Query(value="update TranInfo set trainArrvialTime=:trainArrvialTime"
+			+ "where tranNo=:tranNo AND stationID=:stationID", nativeQuery = true)
 	public void updateByTranNo(
 			@Param("tranNo") String tranNo ,
 			@Param("stationID") String stationID, 
-			@Param("trainArrvialTime") 
-			String trainArrvialTime);
+			@Param("trainArrvialTime") String trainArrvialTime);
 }

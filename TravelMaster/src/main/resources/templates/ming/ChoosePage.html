@@ -19,6 +19,9 @@
 								<div class="row">
 									<h2 class="col  text-center">台灣高鐵座位圖</h2>
 								</div>
+								<h6 class="col  text-center">
+									<i class="fa-solid fa-caret-down"></i>&nbsp;&nbsp;請點選座位完成訂票
+								</h6>
 								<div class="row">
 									<div class="col">
 										<table class="table table-bordered border-dark table-sm">
@@ -39,15 +42,9 @@
 								<div class="section">
 									<h2 style="text-align: center;">訂票紀錄</h2>
 									<form>
-										<div class="row">
-											<label for="name">會員姓名 ： </label> <input type="email"
-												class="form-control" id="name">
-										</div>
-										<div class="row">
-											<label for="emailAddr">電子信箱 ：</label> <input type="email"
-												class="form-control" id="emailAddr"
-												aria-describedby="emailHelp" placeholder="Enter email">
-											<small id="emailHelp" class="form-text text-muted">我們會將訂票紀錄寄送至您的電子信箱。</small>
+										<div class="input-group mb-3 p-2">
+											<span class="input-group-text">會員姓名</span><input
+												type="text" class="form-control" placeholder="請在此輸入您的姓名">
 										</div>
 										<div class="row">
 											<div class="form-floating mb-3 col-6">
@@ -91,7 +88,7 @@
 												<label for="ArrivalStation">抵達站 ：</label>
 											</div>
 										</div>
-										<div class="row mb-3">
+										<div class="mb-3 p-2">
 											<label for="selectedSeats">已選座位 ： </label>
 											<div class="form-control" id="selectedSeats">&nbsp;</div>
 										</div>
@@ -109,8 +106,8 @@
 											</div>
 										</div>
 										<div style="text-align: center;">
-											<button type="submit" class="btn btn-dark" id="submit">確定訂票</button>
-											<button type="reset" class="btn btn-dark">取消訂票</button>
+											<button type="submit" class="btn btn-dark" id="submit">加入購物車</button>
+											<button type="reset" class="btn btn-dark" th:onclick="cancel()">取消訂票</button>
 										</div>
 									</form>
 									<input type="hidden" id="singlePrice" th:value="${singlePrice}">

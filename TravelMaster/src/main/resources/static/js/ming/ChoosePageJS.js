@@ -8,24 +8,24 @@ function createBtn(content) {
 	input_btn.classList.add("btn-check");
 	input_btn.autocomplete = "off";
 	input_btn.onchange = show;
-	
+
 
 	let input_btn_lbl = document.createElement("label");
 	td.appendChild(input_btn_lbl);
 	input_btn_lbl.classList.add("btn");
 	input_btn_lbl.classList.add("btn-secondary");
-	
-	input_btn.onclick = ()=>{
-		if(input_btn.checked){
+
+	input_btn.onclick = () => {
+		if (input_btn.checked) {
 			input_btn_lbl.classList.remove("btn-secondary");
 			input_btn_lbl.classList.add("btn-dark");
-			
-		}else{
+
+		} else {
 			input_btn_lbl.classList.remove("btn-dark");
 			input_btn_lbl.classList.add("btn-secondary");
 		}
 	};
-	
+
 	input_btn_lbl.setAttribute("for", content);
 	input_btn_lbl.innerHTML = content;
 	return td;
@@ -80,8 +80,27 @@ function show() {
 	document.querySelector("#priceTotal").innerHTML = priceTotal + "&nbsp;元";
 }
 
+function cancel() {
+	Swal.fire({
+		title: '是否取消訂票?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: '確定',
+		cancelButtonText: '取消'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			Swal.fire(
+				'您已取消訂票，即將返回查詢頁面',
+			)
+			window.setTimeout((()=>location.href = `select`),2000);
+		}
+	})
+}
+
 $(function() {
 	$('#submit').on("click", function() {
-		Swal.fire('您的訂票已完成!', '請至會員專區查閱電子票券', 'success'); 
+		Swal.fire('您的訂票已加入購物車!', '請至會員專區查閱電子票券', 'success');
 	})
 })

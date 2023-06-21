@@ -28,9 +28,15 @@
 								<div class="download-ttable"></div>
 								<div class="ha-nav-content"></div>
 
-								<div class="modal fade" aria-hidden="true" id="EditField">
+								<div class="modal fade" aria-hidden="true" id="EditField"
+									aria-labelledby="EditFieldTitle">
 									<div class="modal-dialog">
 										<div class="modal-content">
+											<div class="modal-header" style="justify-content: center;">
+												<h5 class="modal-title" id="EditFieldTitle">
+													<i class="fa-solid fa-pen-to-square"></i>&nbsp;增修
+												</h5>
+											</div>
 											<div class="modal-body">
 												<div class="input-group">
 													<div class="input-group mb-3 p-2">
@@ -49,7 +55,7 @@
 													</div>
 
 													<div class="w-100 p-2">
-														<button id="EditFieldSubmit"
+														<button id="EditFieldSubmit" th:onclick="formSubmit()"
 															style="margin: 0px 30px 0px 0px;"
 															class="btn btn-secondary">送出</button>
 														<button style="margin: 0px 0px 0px 30px;"
@@ -97,6 +103,7 @@
 	
 var EditField;
 var dtDataList;
+var ACTION_STATE = 0;
 $(document).ready(function() {
  	dtDataList = JSON.parse(document.querySelector("#dataTableContent").value);
 	$('#queryResult').DataTable({ data: dtDataList });
@@ -106,15 +113,17 @@ $(document).ready(function() {
 function insertRecord(){
 	EditField.show();
 	document.querySelector("#EditFieldSubmit").innerHTML =  "新增";
+	document.querySelector("#EditFieldTitle").innerHTML =  `<i class="fa-solid fa-pen-to-square"></i>&nbsp;新增`;
+	ACTION_STATE = 1;
 }
 function updateTarget(tranNo) {
 	document.querySelector("#EditFieldSubmit").innerHTML =  "修改";
+	document.querySelector("#EditFieldTitle").innerHTML =  `<i class="fa-solid fa-pen-to-square"></i>&nbsp;修改`;
 	document.querySelector("#EditField_tranNo").readOnly = true;
 	document.querySelector("#EditField_tranNo").value = tranNo;
 	let timeLst;
-	dtDataList.forEach((dl)=>{ // dtDataList: [[tranNo1,t1a,t1b,...],[tranNo2,t2a,t2b,...],[tranNo2,t2a,t2b,...]]
-	// dl: [tranNo,t1,t1,...]
-		if(dl[0] == tranNo){ // dl[0] => tranNo
+	dtDataList.forEach((dl)=>{ 
+		if(dl[0] == tranNo){ 
 			timeLst = dl;
 		}
 	});
@@ -125,13 +134,37 @@ function updateTarget(tranNo) {
 	 current_st++ ;
 	});
 	EditField.show();
-
+	ACTION_STATE = 2;
 }
 
 function cancel(){
 	EditField.hide();
 	document.querySelector("#EditField_tranNo").readOnly = false;
+	ACTION_STATE = 0;
 }
+
+function formSubmit(){
+	
+	let StLst = [[${stationList}]];
+	let parmLst = "ACTION_STATE,tranNo,StLst".split(",");
+	parmLst.push(ACTION_STATE); 
+	parmLst.push(document.querySelector("#EditField_tranNo").value); 
+	StLst.forEach((st)=>{
+		parmLst.push(document.querySelector("#EditField_ST_" + st.stationID).value);
+	});
+	
+	
+	let submitForm = document.createElement("form");
+	submitForm.method = "POST";
+	submitForm.action = ``;
+	var tmpInput = document.createElement("input");
+	tmpInput.setAttribute("name", "parmLst");
+	tmpInput.setAttribute("value", JSON.stringify(parmLst));
+	submitForm.appendChild(tmpInput);
+	document.body.appendChild(submitForm);
+	submitForm.submit();
+}
+
 
 function deleteTarget(tranNo) {
 	Swal.fire({
