@@ -1,7 +1,5 @@
 package com.tm.TravelMaster.ming.model.dto;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,30 +10,30 @@ import lombok.Data;
 @Table(name = "TranInfo")
 @Data
 public class TrainTimeInfo {
-	
+
 	public TrainTimeInfo() {
 	}
-	
-	@Id @Column(name = "ID")	
+
+	@Id
+	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "TranNo")
 	private String tranNo;
-	
+
 	@Column(name = "DepartureDate")
-	private Date departureDate;
-	
+	private String departureDate;
+
 	@Column(name = "DepartureST")
 	private String departureST;
-	
+
 	@Column(name = "DestinationST")
 	private String destinationST;
-	
+
 	@Column(name = "Departuretime")
 	private String departureTime;
-	
-	@Column(name = "Arrivaltime") 
-	private String arrivalTime;
 
+	@Column(name = "Arrivaltime")
+	private String arrivalTime;
 
 }

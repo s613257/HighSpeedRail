@@ -240,6 +240,12 @@ function choose(tranInfo) {
 		tmpInput.setAttribute("value", tranInfo[parm]);
 		submitForm.appendChild(tmpInput);
 	});
+	var tmpInput = document.createElement("input");
+	tmpInput.setAttribute("name", "departureDate");
+	tmpInput.setAttribute("value", document.querySelector("#departuredate").value);
+	submitForm.appendChild(tmpInput);
+	
+	
 	document.body.appendChild(submitForm);
 	submitForm.submit();
 }

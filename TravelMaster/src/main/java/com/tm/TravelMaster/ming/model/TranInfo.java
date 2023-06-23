@@ -3,6 +3,8 @@ package com.tm.TravelMaster.ming.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.google.gson.JsonObject;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,23 +13,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Entity @Table(name = "TranInfo")
+@Entity
+@Table(name = "TranInfo")
 @Data
 public class TranInfo {
-	
-	@Id @Column(name = "id")
+
+	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(name = "TranNo")
 	private String tranNo;
-	
+
 	@Column(name = "StationID")
 	private int stationID;
-	
+
 	@Column(name = "TrainArrivalTime")
 	private String trainArrvialTime;
-	
+
 	public TranInfo() {
 	}
 
@@ -37,9 +41,16 @@ public class TranInfo {
 		this.trainArrvialTime = rs.getString("tranArrvialTime");
 	}
 
+	public TranInfo(JsonObject jobj) {
+		this.tranNo = jobj.get("tranNo").getAsString();
+		this.stationID = jobj.get("stationID").getAsInt();
+		this.trainArrvialTime = jobj.get("trainArrvialTime").getAsString();
+	}
+
 	@Override
 	public String toString() {
-		return "TranInfoDTO [TranNo=" + tranNo + ", StationID=" + stationID + ", TrainArrivalTime=" + trainArrvialTime + "]";
+		return "TranInfoDTO [TranNo=" + tranNo + ", StationID=" + stationID + ", TrainArrivalTime=" + trainArrvialTime
+				+ "]";
 	}
 
 }

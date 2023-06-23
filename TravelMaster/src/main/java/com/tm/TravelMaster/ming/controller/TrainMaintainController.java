@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.tm.TravelMaster.ming.db.service.HighSpeedRailService;
 import com.tm.TravelMaster.ming.model.StationInfo;
 import com.tm.TravelMaster.ming.model.TranInfo;
@@ -44,7 +48,7 @@ public class TrainMaintainController {
 
 		List<StationInfo> stationList = highSpeedRailService.findAllStationInfo();
 
-		// --- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ dataTable 
+		// --- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ dataTable
 		List<List<String>> dataTableContentList = new ArrayList<List<String>>();
 
 		for (Object trainNo : trainNoSet.toArray()) {
@@ -79,16 +83,31 @@ public class TrainMaintainController {
 		String json = String.format("{\"id\":\"%s\", \"result\":%s}", tranNo, msg);
 		return json;
 	}
-	
-	@PostMapping("trainMaintain")
-	public String updateorInsrty(@RequestParam("parmLst") String parmLst, Model model){
-//		List<TranInfo> list = highSpeedRailService.findAllTranInfo();
-//		List<StationInfo> stationList = highSpeedRailService.findAllStationInfo();
-		highSpeedRailService.updateByTranNo(parmLst, parmLst, parmLst);
-		model.addAttribute("parmLst", parmLst);
-		
+
+	@PostMapping("trainMaintain-onSubmit")
+	public String UpdateOrInsert(@RequestParam("reqBody") String reqBody, Model model) {
+		System.out.println(reqBody);
+		JsonObject reqBodyJsonObj = JsonParser.parseString(reqBody).getAsJsonObject();
+		int action = reqBodyJsonObj.get("action").getAsInt();
+		JsonArray TranInfoList = reqBodyJsonObj.get("TranInfoList").getAsJsonArray();
+		for (JsonElement TranInfo : TranInfoList) {
+			TranInfo tif = new TranInfo(TranInfo.getAsJsonObject());
+			switch (action) {
+			case 1: { // insert
+				highSpeedRailService.insertTranInfo(tif);
+				break;
+			}
+			case 2: { // update
+				highSpeedRailService.updateByTranNoAndStationID(tif);
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + action);
+			}
+		}
+
 		return "redirect:/trainMaintain";
-		
+
 	}
 
 }

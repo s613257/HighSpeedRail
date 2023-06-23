@@ -5,20 +5,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,24 +135,26 @@ public class HighSpeedRailService {
 	public List<TranInfo> findAllTranInfo() {
 		return tranInfoRepos.findAll();
 	}
-	
-	//新增時刻表
-	public void insertTicketInfo(TranInfo train) {
+
+	// 新增時刻表
+	public void insertTranInfo(TranInfo train) {
 		tranInfoRepos.save(train);
 	}
-	
-	//編輯時刻表
+
+	// 編輯時刻表
 	@Transactional
-	public void updateByTranNo(String tranNo, String stationID, String trainArrvialTime) {
-		tranInfoRepos.updateByTranNo(tranNo, stationID, trainArrvialTime);
-    }
-	
-	//查詢時刻表
+	public void updateByTranNoAndStationID(TranInfo tif) {
+
+		tranInfoRepos.updateByTranNoAndStationID(tif.getTranNo(), Integer.toString(tif.getStationID()),
+				tif.getTrainArrvialTime());
+	}
+
+	// 查詢時刻表
 	public List<TrainTimeInfo> getAllTrainTimeInfo() {
 		return trainTimeInfoRepostory.getTrainTimeInfo();
 	}
-	
-	//刪除時刻表
+
+	// 刪除時刻表
 	@Transactional
 	public boolean deleteTrainInfoByTranNo(String tranNo) {
 		if (tranNo != null) {
@@ -168,5 +164,5 @@ public class HighSpeedRailService {
 		}
 		return false;
 	}
-	
+
 }

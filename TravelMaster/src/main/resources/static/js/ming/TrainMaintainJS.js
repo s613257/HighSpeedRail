@@ -42,7 +42,6 @@ function cancel() {
 }
 
 function formSubmit() {
-
 	let StLst = [[${ stationList }]];
 	let parmLst = "ACTION_STATE,tranNo,StLst".split(",");
 	parmLst.push(ACTION_STATE); // parmLst[0] : ACTION => "1:新增 ; 2:修改"
