@@ -33,7 +33,7 @@
 																			id="spotNoInput" th:autofocus>
 																	</div>
 																	<div th:unless="${spots == null}">
-																		<input type="text" th:value="${spots?.spotNo}"
+																		<input class="form-control" type="text" th:value="${spots?.spotNo}"
 																			name="spotNo" id="spotNoInput" th:onclick="blur()">
 																	</div>
 																</div>
