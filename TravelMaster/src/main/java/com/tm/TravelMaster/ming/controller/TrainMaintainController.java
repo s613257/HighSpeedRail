@@ -42,6 +42,7 @@ public class TrainMaintainController {
 		}
 
 		Set<String> trainNoSet = new HashSet<>();
+		
 		for (TranInfo info : list) {
 			trainNoSet.add(info.getTranNo());
 		}
@@ -56,7 +57,7 @@ public class TrainMaintainController {
 			dataLst.add((String) trainNo);
 			for (StationInfo stInfo : stationList) {
 				String key = (String) trainNo + "," + stInfo.getStationID();
-				dataLst.add(trainInfoMap.get(key));
+				dataLst.add(trainInfoMap.get(key));  // [102,1 -> 12:00],[102,2 -> 12:15]
 			}
 			String update = "<button class=\"btn btn-light\"  data-bs-toggle=\"modal\" data-bs-target=\"#EditField\" onclick=\"updateTarget("
 					+ trainNo + ")\"><i class=\"fa-solid fa-pen-to-square\"></i> </button>";
