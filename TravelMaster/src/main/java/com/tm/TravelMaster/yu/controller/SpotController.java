@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tm.TravelMaster.yu.model.Spot;
 import com.tm.TravelMaster.yu.service.SpotService;
@@ -22,12 +21,14 @@ public class SpotController {
 	@Autowired
 	private SpotService spotService;
 	
+	
 	@GetMapping("")
     public String query(Model model) {
         List<Spot> spots = spotService.findAll();
         model.addAttribute("spots", spots);
         return "yu/Result";
     }
+	
 
     @GetMapping("/insert")
     public String insert(Model model) {

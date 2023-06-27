@@ -31,7 +31,7 @@ public class Spot {
 	private String spotInfo;
 	
 	@Column(name="spotPic")
-	private byte[] spotPic;
+	private String spotPic;
 	
 	public Spot() {
 	}

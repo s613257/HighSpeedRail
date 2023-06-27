@@ -10,4 +10,10 @@ public class IndexController {
 	public String dashbord() {
 		return "layout/index";
 	}
+
+	// 會員中心
+	@GetMapping("/layout/memberCenter")
+	public String getMemberCenter() {
+		return "layout/memberCenter";
+	}
 }
