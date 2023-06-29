@@ -4,6 +4,61 @@
 <head>
 	<meta charset="utf-8" />
 	<title>台灣高鐵班次維護</title>
+	<style>
+.drag-file {
+	background-color: #FFF5EE;
+	border: 1px dashed;
+	height: 300px;
+	width: 350px;
+	border-radius: 15px; 
+	font-weight: 400;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.drag-file.active {
+	border: 2px solid #708090;
+}
+
+.drag-file .icon {
+	font-size: 30px;
+	color: #708090;
+}
+
+.drag-file h6 {
+	font-size: 20px;
+	font-weight: 300;
+	color: #708090;
+}
+
+.drag-file span {
+	font-size: 14px;
+	font-weight: 300;
+	color: #708090;
+	margin: 10px 0 15px 0;
+}
+
+.drag-file button {
+	padding: 10px 25px;
+	font-size: 14px;
+	font-weight: 300;
+	border: none;
+	outline: none;
+	background: transparent;
+	color: #708090;
+	border: 1px solid #708090;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: all 0.5s;
+}
+
+.drag-file button:hover {
+	background-color: #708090;
+	color: #FFFAFA;
+}
+</style>
 </head>
 
 <body>
@@ -12,10 +67,18 @@
 		<div class="container-fluid px-4">
 			<div class="d-flex justify-content-between align-items-center">
 				<h1 class="mt-4">高鐵班次維護</h1>
-				<button type="button" title="新增單筆資料" class="btn btn-outline-dark mt-3" id="insert"
-					th:onclick="insertRecord()">
-					<i class="fa-solid fa-plus"></i> 新增
-				</button>
+				<div class="d-flex">
+					<button type="button" title="新增單筆資料"
+						class="btn btn-outline-dark mt-3" style="margin: 5px" id="insert"
+						th:onclick="insertRecord()">
+						<i class="fa-solid fa-plus"></i> 新增
+					</button>
+					<button type="button" title="批次新增資料"
+						class="btn btn-outline-dark mt-3" style="margin: 5px" id="batch"
+						th:onclick="openBatchModal()">
+						<i class="fa-solid fa-plus"></i> 批次
+					</button>
+				</div>
 			</div>
 			<hr>
 			<div class="card mb-4">
@@ -88,6 +151,42 @@
 							</div>
 						</section>
 					</article>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" aria-hidden="true" id="BatchUploadModal"
+			aria-labelledby="BatchUploadModalTitle">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header" style="justify-content: center;">
+						<h5 class="modal-title" id="BatchUploadModalTitle">
+							<i class="fa-solid fa-cloud-arrow-up"></i>&nbsp;批次新增資料
+						</h5>
+					</div>
+					<div class="modal-body">
+						<div class="input-group container">
+							<div class="input-group mb-3 p-2">
+								<input type="file" class="form-control" id="batchFileInput"
+									accept=".csv">
+							</div>
+							<div class="drag-file w-100 mb-3 p-2 d-flex justify-content-center" style="border-radius: 15px">
+								<div class="icon">
+									<i class="fas fa-cloud-upload-alt"></i>
+								</div>
+								<h6>Drag & Drop File Here</h6>
+								<span>OR</span>
+								<button>Browse File</button>
+								<input type="file" hidden  accept=".csv">
+							</div>
+							<div class="w-100 p-2 d-flex justify-content-center">
+								<button id="BatchUploadSubmit" onclick="uploadBatchData()"
+									class="btn btn-secondary">上傳</button>
+								<button style="margin: 0px 0px 0px 30px;"
+									data-bs-dismiss="modal" onclick="cancelBatchUpload()"
+									class="btn btn-secondary">取消</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -219,6 +318,65 @@
 					}
 				}
 			});
+		}
+		function openBatchModal() {
+			$("#BatchUploadModal").modal("show");
+			$("#BatchUploadModal").css("z-index", "1500");
+		}
+
+		function cancelBatchUpload() {
+			$("#BatchUploadModal").modal("hide");
+		}
+
+		// Handle batch file upload
+		function uploadBatchData() {
+			let fileInput = document.getElementById("batchFileInput");
+			let file = fileInput.files[0];
+			
+
+			if (file) {
+				let formData = new FormData();
+				formData.append("file", file);
+
+				fetch("batchUploadEndpoint", {
+					method: "POST",
+					body: formData
+				})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire(
+								"上傳成功",
+								"批次資料上傳成功",
+								"success"
+							).then(() => {
+								location.reload(); // Refresh the page after successful upload
+							});
+						} else {
+							Swal.fire(
+								"上傳失敗",
+								"批次資料上傳失敗",
+								"error"
+							);
+						}
+					})
+					.catch(error => {
+						console.error("Error:", error);
+						Swal.fire(
+							"上傳失敗",
+							"批次資料上傳失敗",
+							"error"
+						);
+					});
+
+				cancelBatchUpload();
+			} else {
+				Swal.fire(
+					"錯誤",
+					"請選擇要上傳的檔案",
+					"error"
+				);
+			}
 		}
 	</script>
 	<script th:src="@{/js/ming/sweetalert2.js}"></script>
